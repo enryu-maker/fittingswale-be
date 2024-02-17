@@ -125,29 +125,35 @@ class ResetPasswordAPIView(APIView):
             return Response({'msg': 'Invalid password reset link'}, status=status.HTTP_400_BAD_REQUEST)
 
     
-# class UserAPIView(APIView):
-#     authentication_class = [JWTAuthentication,]
-#     def get(self,request):
-#         user = request.user
-#         serializer = UserSerializer(user)
-#         return Response(serializer.data)
+class UserAPIView(APIView):
+    authentication_class = [JWTAuthentication,]
+    def get(self,request):
+        user = request.user
+        
+        try:
+            print(user.email)
+        except Exception as e:
+            return Response({"msg":"AnonymousUser Cannot View Profile"})
+        
+        serializer = UserSerializer(user)
+        return Response(serializer.data)
 
 
-# class UserEditAPIView(APIView):
-#     authentication_classes = [JWTAuthentication,]
-#     # permission_classes = ['']
-#     def get(self, request):
-#         user = request.user 
-#         serializer = MyUserSerializer(user)
-#         return Response(serializer.data)
+class EditUserAPIView(APIView):
+    authentication_classes = [JWTAuthentication,]
+    # permission_classes = ['']
+    def get(self, request):
+        user = request.user 
+        serializer = UserSerializer(user)
+        return Response(serializer.data)
 
-#     def patch(self, request):
-#         user = request.user
-#         serializer = MyUserSerializer(user, data=request.data, partial=True)
-#         if serializer.is_valid():
-#             serializer.save()
-#             return Response(serializer.data)
-#         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    def patch(self, request):
+        user = request.user
+        serializer = UserSerializer(user, data=request.data, partial=True)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
     
 
 # class UserAddressAPIView(APIView):

@@ -35,3 +35,20 @@ class RegisterSerializer(serializers.ModelSerializer):
                 else:
                     msg.append({"msg":f"{field} is Invalid"})
             raise serializers.ValidationError(msg[0])
+
+class UserSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = User
+        fields = ["name","mobile_no","email","gst_no","pan_no","pan_card","gst_certificate","role"]
+        
+    def to_internal_value(self, data):
+        try:
+            return super().to_internal_value(data)
+        except serializers.ValidationError as error:
+            msg =[]
+            for field, messages in error.detail.items():
+                if "required" in messages[0].lower():
+                    msg.append({'msg': f'{field} is Required'.capitalize().replace('_'," ")})
+                else:
+                    msg.append({"msg":f"{field} is Invalid"})
+            raise serializers.ValidationError(msg[0])

@@ -80,8 +80,12 @@ WSGI_APPLICATION = 'fittingwale.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        'ENGINE': 'django.db.backends.postgresql_psycopg2',
+        'NAME': 'fittingswale-db', 
+        'USER': 'admin',
+        'PASSWORD': 'Akif@1432@Akif',
+        'HOST': '103.154.185.166', 
+        'PORT': '5432',
     }
 }
 
