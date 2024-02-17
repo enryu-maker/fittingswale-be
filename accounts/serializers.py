@@ -29,10 +29,9 @@ class RegisterSerializer(serializers.ModelSerializer):
             return super().to_internal_value(data)
         except serializers.ValidationError as error:
             msg =[]
-            # if isinstance(error,dict):
             for field, messages in error.detail.items():
                 if "required" in messages[0].lower():
                     msg.append({'msg': f'{field} is Required'.capitalize().replace('_'," ")})
                 else:
-                    msg.append({"msg":f"{field} URL is Invalid"})
+                    msg.append({"msg":f"{field} is Invalid"})
             raise serializers.ValidationError(msg[0])

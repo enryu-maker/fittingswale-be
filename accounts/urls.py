@@ -3,10 +3,10 @@ from django.urls import path,include
 from .views import *
 
 urlpatterns = [
-    # path('login/', admin.site.urls),
+    path('login/', LoginUserAPIView.as_view()),
     # path('register/',include('accounts.urls')),
-    # path('verify/<str:id>/<str:token>/',include('accounts.urls')),
-    # path('forget-password/',include('accounts.urls')),
-    # path('reset-password/',include('accounts.urls')),
+    path('verify/',VerifyOTPAPIView.as_view()),
+    path('forget-password/',ForgotPasswordAPIView.as_view()),
+    path('reset-password/<str:uidb64>/<str:token>/',ResetPasswordAPIView.as_view()),
     path('register/',RegisterUserAPIView.as_view())
 ]
