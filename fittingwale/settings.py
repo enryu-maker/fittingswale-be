@@ -37,6 +37,11 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'accounts',
+    'rest_framework',
+    'rest_framework_simplejwt',
+    'products',
+    'storages'
 ]
 
 MIDDLEWARE = [
@@ -121,3 +126,48 @@ STATIC_URL = 'static/'
 # https://docs.djangoproject.com/en/5.0/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+AUTH_USER_MODEL = "accounts.User"
+
+REST_FRAMEWORK = {
+    'DEFAULT_AUTHENTICATION_CLASSES': (
+        'rest_framework_simplejwt.authentication.JWTAuthentication',
+    )
+}
+
+from datetime import timedelta
+...
+
+SIMPLE_JWT = {
+    "ACCESS_TOKEN_LIFETIME": timedelta(days=30),
+    "REFRESH_TOKEN_LIFETIME": timedelta(days=40),
+    "ROTATE_REFRESH_TOKENS": False,
+    "BLACKLIST_AFTER_ROTATION": False,
+    "UPDATE_LAST_LOGIN": False,
+
+    "ALGORITHM": "HS256",
+    "SIGNING_KEY": SECRET_KEY,
+    "VERIFYING_KEY": "",
+    "AUDIENCE": None,
+    "ISSUER": None,
+    "JSON_ENCODER": None,
+    "JWK_URL": None,
+    "LEEWAY": 0,
+}
+
+AWS_ACCESS_KEY_ID = "AKIA4M2OQN2IR5DXFXXH" #str(os.getenv('ACCESS_KEY'))
+AWS_SECRET_ACCESS_KEY = "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" #str(os.getenv('SECRET_ACCESS_KEY'))
+AWS_STORAGE_BUCKET_NAME = "fittingswale-storage" #str(os.getenv('BUCKET_NAME'))
+AWS_S3_SIGNATURE_NAME = 's3v4',
+AWS_S3_REGION_NAME = 'us-east-1'
+AWS_S3_FILE_OVERWRITE = False
+AWS_DEFAULT_ACL =  None
+AWS_S3_VERITY = True
+DEFAULT_FILE_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
+
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = 'smtp.gmail.com'  # Your SMTP server address
+EMAIL_PORT = 587  # Your SMTP server port (587 is a common choice for TLS)
+EMAIL_USE_TLS = True  # Use TLS encryption for secure connection
+EMAIL_HOST_USER = "itsriteshmahale2002@gmail.com" # Your email address for authentication
+EMAIL_HOST_PASSWORD = "jduq xhqz tizb xviq"
