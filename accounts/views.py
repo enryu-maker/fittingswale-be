@@ -156,75 +156,75 @@ class EditUserAPIView(APIView):
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
     
 
-# class UserAddressAPIView(APIView):
-#     authentication_classes = [JWTAuthentication]
-#     permission_classes = [IsAuthenticated]
+class UserAddressAPIView(APIView):
+    authentication_classes = [JWTAuthentication]
+    permission_classes = [IsAuthenticated]
 
-#     def get(self, request):
-#         user = request.user
-#         addresses = Address.objects.filter(user=user)
-#         serializer = UserAddressSerializer(addresses, many=True)
-#         return Response(serializer.data)
+    def get(self, request):
+        user = request.user
+        addresses = Address.objects.filter(user=user)
+        serializer = UserAddressSerializer(addresses, many=True)
+        return Response(serializer.data)
 
-#     def post(self, request):
-#         user = request.user
-#         request.data['user'] = user.id
+    def post(self, request):
+        user = request.user
+        request.data['user'] = user.id
 
-#         Address.objects.filter(user=user).update(active=False)
+        Address.objects.filter(user=user).update(active=False)
 
-#         serializer = UserAddressSerializer(data=request.data)
-#         if serializer.is_valid():
-#             serializer.save(active=True)
-#             return Response(serializer.data, status=status.HTTP_201_CREATED)
-#         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        serializer = UserAddressSerializer(data=request.data)
+        if serializer.is_valid():
+            serializer.save(active=True)
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
     
-#     def patch(self, request, pk):
-#         user = request.user
-#         try:
-#             address = Address.objects.get(id=pk, user=user)
-#             serializer = UserAddressSerializer(address, data=request.data, partial=True)
+    def patch(self, request, pk):
+        user = request.user
+        try:
+            address = Address.objects.get(id=pk, user=user)
+            serializer = UserAddressSerializer(address, data=request.data, partial=True)
 
-#             if serializer.is_valid():
-#                 serializer.save()
-#                 return Response(serializer.data)
-#             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-#         except Address.DoesNotExist:
-#             return Response({'msg': 'Address not found or does not belong to the authenticated user'}, status=status.HTTP_404_NOT_FOUND)
+            if serializer.is_valid():
+                serializer.save()
+                return Response(serializer.data)
+            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        except Address.DoesNotExist:
+            return Response({'msg': 'Address not found or does not belong to the authenticated user'}, status=status.HTTP_404_NOT_FOUND)
         
-#     def put(self, request, pk):
-#         user = request.user
-#         try:
+    def put(self, request, pk):
+        user = request.user
+        try:
             
-#             Address.objects.filter(user=user).update(active=False)
+            Address.objects.filter(user=user).update(active=False)
             
-#             address = Address.objects.get(id=pk, user=user)
+            address = Address.objects.get(id=pk, user=user)
 
-#             address.active = True
-#             address.save()
+            address.active = True
+            address.save()
 
-#             return Response({'msg': 'Address updated successfully'}, status=status.HTTP_200_OK)
-#         except Address.DoesNotExist:
-#             return Response({'msg': 'Address not found or does not belong to the authenticated user'}, status=status.HTTP_404_NOT_FOUND)
+            return Response({'msg': 'Address updated successfully'}, status=status.HTTP_200_OK)
+        except Address.DoesNotExist:
+            return Response({'msg': 'Address not found or does not belong to the authenticated user'}, status=status.HTTP_404_NOT_FOUND)
 
     
-#     def delete(self, request, pk):
-#         user = request.user
-#         try:
-#             address = Address.objects.get(id=pk, user=user)
+    def delete(self, request, pk):
+        user = request.user
+        try:
+            address = Address.objects.get(id=pk, user=user)
             
-#             if address.active:
-#                 # Find any other address for the user and set it as active
-#                 remaining_addresses = user.address_set.exclude(id=pk)
-#                 if remaining_addresses.exists():
-#                     new_active_address = remaining_addresses.first()
-#                     new_active_address.active = True
-#                     new_active_address.save()
+            if address.active:
+                # Find any other address for the user and set it as active
+                remaining_addresses = user.address_set.exclude(id=pk)
+                if remaining_addresses.exists():
+                    new_active_address = remaining_addresses.first()
+                    new_active_address.active = True
+                    new_active_address.save()
             
-#             address.delete() 
+            address.delete() 
                 
-#             return Response({'msg': 'Address deleted successfully'}, status=status.HTTP_204_NO_CONTENT)
-#         except Address.DoesNotExist:
-#             return Response({'msg': 'Address not found'}, status=status.HTTP_404_NOT_FOUND)
+            return Response({'msg': 'Address deleted successfully'}, status=status.HTTP_204_NO_CONTENT)
+        except Address.DoesNotExist:
+            return Response({'msg': 'Address not found'}, status=status.HTTP_404_NOT_FOUND)
         
 
 # class UserSettingsAPIView(APIView):

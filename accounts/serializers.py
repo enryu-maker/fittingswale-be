@@ -52,3 +52,8 @@ class UserSerializer(serializers.ModelSerializer):
                 else:
                     msg.append({"msg":f"{field} is Invalid"})
             raise serializers.ValidationError(msg[0])
+
+class UserAddressSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Address
+        fields = "__all__"
