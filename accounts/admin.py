@@ -9,7 +9,6 @@ class UserAdmin(BaseUserAdmin):
         (None, {'fields': ('email', 'password')}),
         (_('Personal info'), {'fields': ('name', 'mobile_no', 'pan_no', 'gst_no', 'pan_card', 'gst_certificate', 'role','groups')}),
     )
-    
     add_fieldsets = (
         (None, {
             'classes': ('wide',),

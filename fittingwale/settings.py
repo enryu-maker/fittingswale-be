@@ -26,7 +26,9 @@ SECRET_KEY = 'django-insecure-jhe39tf5&o7lb)9r2o1jtg$mzd_z1ota5p8o569mj!f7uokrb0
 DEBUG = True
 
 ALLOWED_HOSTS = [
-    "api-nerdtech.fittingswale.in"
+    # "api-nerdtech.fittingswale.in",
+    # '127.0.0.1:8000'
+    "*"
 ]
 CSRF_TRUSTED_ORIGINS=[
     "https://api-nerdtech.fittingswale.in/"
@@ -35,6 +37,7 @@ CSRF_TRUSTED_ORIGINS=[
 # Application definition
 
 INSTALLED_APPS = [
+    # 'jazzmin',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -47,6 +50,8 @@ INSTALLED_APPS = [
     'products',
     'storages',
     'whitenoise.runserver_nostatic',
+    'nested_admin',
+    'static_data'
 ]
 
 MIDDLEWARE = [
@@ -167,9 +172,9 @@ SIMPLE_JWT = {
     "LEEWAY": 0,
 }
 
-AWS_ACCESS_KEY_ID = "AKIA4M2OQN2IR5DXFXXH" #str(os.getenv('ACCESS_KEY'))
-AWS_SECRET_ACCESS_KEY = "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" #str(os.getenv('SECRET_ACCESS_KEY'))
-AWS_STORAGE_BUCKET_NAME = "fittingswale-storage" #str(os.getenv('BUCKET_NAME'))
+AWS_ACCESS_KEY_ID = "AKIA4M2OQN2IR5DXFXXH"
+AWS_SECRET_ACCESS_KEY = "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"
+AWS_STORAGE_BUCKET_NAME = "fittingswale-storage"
 AWS_S3_SIGNATURE_NAME = 's3v4',
 AWS_S3_REGION_NAME = 'us-east-1'
 AWS_S3_FILE_OVERWRITE = False
@@ -178,8 +183,8 @@ AWS_S3_VERITY = True
 DEFAULT_FILE_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
 
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
-EMAIL_HOST = 'smtp.gmail.com'  # Your SMTP server address
-EMAIL_PORT = 587  # Your SMTP server port (587 is a common choice for TLS)
-EMAIL_USE_TLS = True  # Use TLS encryption for secure connection
-EMAIL_HOST_USER = "itsriteshmahale2002@gmail.com" # Your email address for authentication
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_PORT = 587
+EMAIL_USE_TLS = True
+EMAIL_HOST_USER = "itsriteshmahale2002@gmail.com"
 EMAIL_HOST_PASSWORD = "jduq xhqz tizb xviq"
