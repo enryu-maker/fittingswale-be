@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import MainCategory,SubCategory
+from .models import *
 
 class MainCategorySerializer(serializers.ModelSerializer):
     class Meta:
@@ -10,4 +10,9 @@ class MainCategorySerializer(serializers.ModelSerializer):
 class SubCategorySerializer(serializers.ModelSerializer):
     class Meta:
         model = SubCategory
+        fields = '__all__'
+        
+class RoleSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Role
         fields = '__all__'
