@@ -16,3 +16,8 @@ class RoleSerializer(serializers.ModelSerializer):
     class Meta:
         model = Role
         fields = '__all__'
+        
+class FinishSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Finish
+        fields = '__all__'

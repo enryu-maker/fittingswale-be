@@ -39,6 +39,9 @@
   - Method: GET (to retrieve), PATCH (to update)
   - Description: Retrieves or updates user profile details.
 
+- **Role**:
+  - Endpoint: 
+
 ### Address Management
 - **User Addresses**: 
   - Endpoint: `account/user-address/`

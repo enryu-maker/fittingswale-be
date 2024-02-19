@@ -13,3 +13,7 @@ class SubCategoryViewSet(viewsets.ModelViewSet):
 class RoleViewSet(viewsets.ModelViewSet):
     queryset= Role.objects.all()
     serializer_class = RoleSerializer
+    
+class FinishViewSet(viewsets.ModelViewSet):
+    queryset = Finish.objects.all()
+    serializer_class = FinishSerializer
