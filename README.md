@@ -41,27 +41,27 @@
 
 ### Address Management
 - **User Addresses**: 
-  - Endpoint: `/user-address/`
+  - Endpoint: `account/user-address/`
   - Method: GET, POST
   - Description: Retrieves user's addresses or adds a new address.
 - **Update Address**: 
-  - Endpoint: `/user-address/<int:pk>/`
+  - Endpoint: `account/user-address/<int:pk>/`
   - Method: PATCH, PUT, DELETE
   - Description: Updates, deletes or sets as active a specific address.
 
 ### Policy Management
 - **Privacy Policy**: 
-  - Endpoint: `/privacy-policy/`
+  - Endpoint: `static_data/privacy-policy/`
   - Method: GET
   - Description: Retrieves the privacy policy.
 
 - **Refund and Cancellation Policy**: 
-  - Endpoint: `/refund-cancellation-policy/`
+  - Endpoint: `static_data/refund-cancellation-policy/`
   - Method: GET
   - Description: Retrieves the refund and cancellation policy.
 
 - **Terms and Conditions**: 
-  - Endpoint: `/terms-and-condition/`
+  - Endpoint: `static_data/terms-and-condition/`
   - Method: GET
   - Description: Retrieves the terms and conditions.
 
