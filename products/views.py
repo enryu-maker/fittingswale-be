@@ -17,3 +17,7 @@ class RoleViewSet(viewsets.ModelViewSet):
 class FinishViewSet(viewsets.ModelViewSet):
     queryset = Finish.objects.all()
     serializer_class = FinishSerializer
+    
+class ProductViewSet(viewsets.ModelViewSet):
+    queryset = Product.objects.all()
+    serializer_class = ProductSerializer
