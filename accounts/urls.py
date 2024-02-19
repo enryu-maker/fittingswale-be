@@ -10,4 +10,5 @@ urlpatterns = [
     path('reset-password/<str:uidb64>/<str:token>/',ResetPasswordAPIView.as_view()),
     path('register/',RegisterUserAPIView.as_view()),
     path('edit-profile/',EditUserAPIView.as_view()),
+    path('google-login/',GoogleLoginAPIView.as_view()),
 ]

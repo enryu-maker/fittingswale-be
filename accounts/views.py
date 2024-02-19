@@ -17,6 +17,8 @@ from django.contrib.auth.tokens import default_token_generator
 from django.contrib.auth import authenticate
 from django.utils.encoding import smart_str
 from rest_framework.viewsets import ModelViewSet
+import random
+import string
 
 def get_tokens_for_user(user):
     refresh = RefreshToken.for_user(user)
@@ -26,6 +28,11 @@ def get_tokens_for_user(user):
         'refresh': str(refresh),
     }
     
+def generate_password(length=12):
+    """Generate a random password."""
+    characters = string.ascii_letters + string.digits + string.punctuation
+    password = ''.join(random.choice(characters) for _ in range(length))
+    return password
 
 class RegisterUserAPIView(APIView):
     def post(self, request):
@@ -83,6 +90,22 @@ class LoginUserAPIView(APIView):
             return Response(tokens)
         return Response({'msg': 'Invalid credentials'}, status=status.HTTP_401_UNAUTHORIZED)
 
+class GoogleLoginAPIView(APIView):
+    def post(self,request):
+        try:
+            email = request.data.get('email')
+            user = User.objects.filter(email=email).first()
+            if user is not None:
+                tokens = get_tokens_for_user(user)
+                return Response(tokens)
+            name = request.data.get('name')
+            password = generate_password()
+            user = User(email=email,name=name,password=password)
+            user.save()
+            tokens = get_tokens_for_user(user)
+            return Response(tokens)
+        except:
+            return Response({'msg':'An Error Occured'})
 
 class ForgotPasswordAPIView(APIView):
     def post(self, request):
