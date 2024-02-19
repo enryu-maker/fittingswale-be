@@ -22,4 +22,5 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('account/',include('accounts.urls')),
     path('product/',include('products.urls')),
+    path('static-data/',include('static_data.urls')),
 ]
