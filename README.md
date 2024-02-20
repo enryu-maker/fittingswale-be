@@ -8,36 +8,85 @@
   - Method: POST
   - Description: Authenticates user and provides access and refresh tokens.
 
+  - Body
+
+  ```json
+  {
+    "email":"email",
+    "password":"pass@123"
+  }
+  ```
+
 - **User Registration**: 
   - Endpoint: `account/register/`
   - Method: POST
   - Description: Registers a new user.
+
+  - Body
+
+  ```json
+  {
+    "email":"email",
+    "password":"pass@123",
+    "role":"customer",
+    "mobile_no":121212212,
+    "name":"john doe"
+  }
+  ```
 
 ### User Management
 - **User Profile**: 
   - Endpoint: `account/`
   - Method: GET
   - Description: Retrieves user profile details.
+  - Auth token required
 
 - **Verify OTP**: 
   - Endpoint: `account/verify/`
   - Method: POST
   - Description: Verifies user's email with OTP.
 
+  - Body
+
+  ```json
+  {
+    "email":"email",
+    "otp":1234
+  }
+  ```
+
 - **Forgot Password**: 
   - Endpoint: `account/forget-password/`
   - Method: POST
   - Description: Sends a password reset link to the user's email.
+
+  - Body
+
+  ```json
+  {
+    "email":"email"
+  }
+  ```
 
 - **Reset Password**: 
   - Endpoint: `account/reset-password/<str:uidb64>/<str:token>/`
   - Method: POST
   - Description: Resets user's password using a valid token.
 
+  - Body
+
+  ```json
+  {
+    "new_password":"pass@123"
+  }
+  ```
+
 - **Edit Profile**: 
   - Endpoint: `account/edit-profile/`
   - Method: GET (to retrieve), PATCH (to update)
   - Description: Retrieves or updates user profile details.
+
+  
 
 - **Role**:
   - Endpoint: 

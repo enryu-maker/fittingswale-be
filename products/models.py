@@ -40,8 +40,8 @@ class SizeChart(models.Model):
 class RolePrice(models.Model):
     role = models.ForeignKey(Role, on_delete=models.CASCADE)
     size = models.ForeignKey(SizeChart, on_delete=models.CASCADE,null=True,blank=True)
-    price = models.DecimalField(max_digits=20, decimal_places=10)
-    price_with_gst = models.DecimalField(max_digits=20,decimal_places=10,null=True)
+    price = models.DecimalField(max_digits=20, decimal_places=2)
+    price_with_gst = models.DecimalField(max_digits=20,decimal_places=2,null=True)
 
     def __str__(self):
         return f"{self.role.title} - {self.price}"
