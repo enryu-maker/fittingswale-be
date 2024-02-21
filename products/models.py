@@ -76,3 +76,8 @@ class Location(models.Model):
     godown_number = models.CharField(max_length=30)
     room_number=models.CharField(max_length=30)
     rack_number=models.CharField(max_length=30)
+
+class ProductDetail(models.Model):
+    product = models.ForeignKey(Product, verbose_name=_("Product"), on_delete=models.CASCADE)
+    name = models.CharField(max_length=30)
+    value = models.CharField(max_length=50)

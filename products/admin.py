@@ -7,19 +7,28 @@ from nested_admin import NestedTabularInline, NestedModelAdmin
 class ProductImageInline(NestedTabularInline):
     model = ProductImage
     extra = 1
+    classes = ('collapse', )
+
+class ProductDetailInline(NestedTabularInline):
+    model = ProductDetail
+    extra = 1
+    classes = ('collapse', )
 
 class RolePriceInline(NestedTabularInline):
     model = RolePrice
     extra = 1
+    classes = ('collapse', )
     
 class SizeChartInline(NestedTabularInline):
     model = SizeChart
     extra = 1
     inlines = [RolePriceInline,]
+    classes = ('collapse', )
     
 class LocationInline(NestedTabularInline):
     model = Location
     extra = 1
+    classes = ('collapse', )
     
 class SizeChartAdmin(admin.ModelAdmin):
     inlines =[RolePriceInline,]
@@ -28,7 +37,7 @@ class ProductAdmin(NestedModelAdmin):
     search_fields = ['product_name']
     list_filter = ['disable','main_category']
     list_display=['id','product_name','main_category','sub_category','stock_quantity','disable']
-    inlines=[ProductImageInline,SizeChartInline,LocationInline]
+    inlines=[ProductImageInline,ProductDetailInline,SizeChartInline,LocationInline]
 
 class MultipleFileInput(forms.ClearableFileInput):
     allow_multiple_selected = True

@@ -165,7 +165,6 @@ class UserAPIView(APIView):
 
 class EditUserAPIView(APIView):
     authentication_classes = [JWTAuthentication,]
-    # permission_classes = ['']
     def get(self, request):
         user = request.user 
         serializer = UserSerializer(user)
