@@ -61,15 +61,15 @@ class Product(models.Model):
 
 class MultiImages(models.Model):
     image = models.ImageField(upload_to="product_multi_images")
-    
+    prod_img = models.ForeignKey("ProductImage", verbose_name=_("Product Image"), on_delete=models.CASCADE,null=True)
     def __str__(self):
         return self.image.name
 
 class ProductImage(models.Model):
     disable = models.BooleanField(default=False)
-    product = models.ForeignKey(Product,on_delete=models.CASCADE)
+    product = models.ForeignKey(Product,on_delete=models.CASCADE,null=True)
     finish = models.ForeignKey(Finish,on_delete=models.CASCADE,null=True)
-    image = models.ManyToManyField(MultiImages)
+    # image = models.ManyToManyField(MultiImages)
     
 class Location(models.Model):
     product = models.ForeignKey(Product, verbose_name=_("Product"), on_delete=models.CASCADE)

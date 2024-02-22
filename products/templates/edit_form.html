@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Edit Product</title>
+</head>
+<body>
+    <h1>Edit Product: {{ product.product_name }}</h1>
+    
+    <!-- Form for editing product details -->
+    <form method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        
+        <!-- Product Name -->
+        <div>
+            <label for="product_name">Product Name:</label>
+            <input type="text" id="product_name" name="product_name" value="{{ product.product_name }}">
+        </div>
+        
+        <!-- Description -->
+        <div>
+            <label for="description">Description:</label>
+            <textarea id="description" name="description">{{ product.description }}</textarea>
+        </div>
+        
+        <!-- Image Upload (if needed) -->
+        <div>
+            <label for="image">Product Image:</label>
+            <input type="file" id="image" name="image">
+        </div>
+        
+        <!-- Add more form fields for other product details -->
+        <div>
+            <label for="main_category">Main Category:</label>
+            <select id="main_category" name="main_category">
+                {% for category in main_categories %}
+                    <option value="{{ category.id }}" {% if category.id == product.main_category.id %} selected {% endif %}>{{ category.category_name }}</option>
+                {% endfor %}
+            </select>
+        </div>
+        
+        <!-- Subcategory Selection -->
+        <div>
+            <label for="sub_category">Subcategory:</label>
+            <select id="sub_category" name="sub_category">
+                {% for subcategory in sub_categories %}
+                    <option value="{{ subcategory.id }}" {% if subcategory.id == product.sub_category.id %} selected {% endif %}>{{ subcategory.sub_category_name }}</option>
+                {% endfor %}
+            </select>
+        </div>
+        
+        <!-- Stock Quantity -->
+        <div>
+            <label for="stock_quantity">Stock Quantity:</label>
+            <input type="number" id="stock_quantity" name="stock_quantity" value="{{ product.stock_quantity }}">
+        </div>
+        
+        <!-- SKU Code -->
+        <div>
+            <label for="sku_code">SKU Code:</label>
+            <input type="text" id="sku_code" name="sku_code" value="{{ product.sku_code }}">
+        </div>
+        
+        <!-- Disable Checkbox -->
+        <div>
+            <label for="disable">Disable:</label>
+            <input type="checkbox" id="disable" name="disable" {% if product.disable %} checked {% endif %}>
+        </div>
+        <!-- Save Changes Button -->
+        <button type="submit">Save Changes</button>
+    </form>
+    
+    
+    <hr>
+    
+    <h2>Product Images</h2>
+    <ul>
+        {% for img in product_image %}
+            <li><img src="{{ img.image.url }}" alt="Product Image">{{img.finish}}</li>
+        {% endfor %}
+    </ul>
+    
+    <!-- Add more sections for other related objects if needed -->
+    
+</body>
+</html>

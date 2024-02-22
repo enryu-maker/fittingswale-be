@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Product Details</title>
+    <style>/* Card container */
+        /* Global styles */
+        /* Global styles */
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f7f7f7;
+            color: #333333;
+            margin: 0;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        /* Card styles */
+        .card {
+            background-color: #ffffff;
+            border-radius: 10px;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+            margin-bottom: 30px;
+            padding: 20px;
+            transition: transform 0.3s ease;
+        }
+        
+        .card:hover {
+            transform: translateY(-5px);
+        }
+        
+        .card h1,
+        .card h2 {
+            color: #333333;
+        }
+        
+        /* Card content styles */
+        .card-content {
+            padding-left: 20px;
+        }
+        
+        .card ul {
+            list-style-type: none;
+            padding: 0;
+        }
+        
+        .card ul li {
+            margin-bottom: 8px;
+        }
+        
+        .card ul li strong {
+            color: #666666;
+        }
+        
+        .card ul li span {
+            color: #333333;
+        }
+        
+        /* Product image styles */
+        .card-image img {
+            max-width: 100%;
+            height: auto;
+            border-radius: 8px;
+            margin-bottom: 15px;
+        }
+        
+        /* Headings styles */
+        h1, h2 {
+            margin-top: 0;
+            margin-bottom: 20px;
+            font-weight: bold;
+            color: #333333;
+        }
+        
+        /* Link styles */
+        a {
+            color: #ff6b6b;
+            text-decoration: none;
+        }
+        
+        a:hover {
+            text-decoration: underline;
+        }
+        
+        /* Button styles */
+        .btn {
+            display: inline-block;
+            padding: 10px 20px;
+            background-color: #ff6b6b;
+            color: #ffffff;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+        
+        .btn:hover {
+            background-color: #ff4f4f;
+        }
+        
+        /* Form styles */
+        .form-group {
+            margin-bottom: 20px;
+        }
+        
+        .form-group label {
+            display: block;
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+        
+        .form-group input[type="text"],
+        .form-group textarea {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #cccccc;
+            border-radius: 5px;
+            font-size: 16px;
+        }
+        
+        .form-group textarea {
+            resize: vertical;
+        }
+        
+
+    </style>
+</head>
+<body>
+    <!-- Product Details -->
+    <div class="card">
+        <h1>Product Details</h1>
+        <h2>{{ product.product_name }}</h2>
+        <div class="card-content">
+            <p><strong>Description:</strong> {{ product.description }}</p>
+            <p><strong>Image:</strong><a href={{product.image.url}}> {{ product.image }}</a></p>
+            <p><strong>Stock:</strong> {{ product.stock_quantity }}</p>
+            <p><strong>Main Category:</strong> {{ product.main_category }}</p>
+            <p><strong>Sub Category:</strong> {{ product.sub_category }}</p>
+            <p><strong>SKU Code:</strong> {{ product.sku_code }}</p>
+            <p><strong>Disable:</strong> {{ product.disable }}</p>
+        </div>
+    </div>
+
+    <!-- Product Images -->
+    <div class="card">
+        <h2>Product Images</h2>
+        <div class="card-content">
+            <ul>
+                {% for image_title in product_image %}
+                    <li><strong>{{ image_title.finish }}</strong></li>
+                    <ul>
+                        {% for img in product_image_with_finish %}
+                            {% if img.prod_img.finish == image_title.finish %}
+                                <li><a href={{ img.image.url}}>{{ img.image}}</a></li>
+                            {% endif %}
+                        {% endfor %}
+                    </ul>
+                {% endfor %}
+            </ul>
+            <a href="{% url 'add_images_and_finishes' product.pk %}" class="btn">Add Images and Finishes</a>
+        </div>
+    </div>
+
+    <div class="card">
+        <h2>Product Details</h2>
+        <div class="card-content">
+            <ul>
+                {% for detail in product_detail %}
+                    <li><strong>{{ detail.name }}</strong>: {{ detail.value }}</li>
+                {% endfor %}
+            </ul>
+        </div>
+    </div>
+
+    <!-- Size Chart -->
+    <div class="card">
+        <h2>Size Chart</h2>
+        <div class="card-content">
+            <ul>
+                {% for size in size_chart %}
+                    <li><strong>Size:</strong> {{ size.size }}</li>
+                    <ul>
+                        {% for price in prices_with_size_chart %}
+                            {% if price.size == size %}
+                                <li style="margin-left:15px"><strong>{{ price.role }}</strong>: {{ price.price }}</li>
+                            {% endif %}
+                        {% endfor %}
+                    </ul>
+                {% endfor %}
+            </ul>
+        </div>
+    </div>
+
+    <!-- Location -->
+    <div class="card">
+        <h2>Location</h2>
+        <div class="card-content">
+            <ul>
+                {% for loc in location %}
+                    <li><strong>Godown:</strong> {{ loc.godown_number }}, <strong>Room:</strong> {{ loc.room_number }}, <strong>Rack:</strong> {{ loc.rack_number }}</li>
+                {% endfor %}
+            </ul>
+        </div>
+    </div>
+</body>
+</html>

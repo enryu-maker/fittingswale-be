@@ -10,5 +10,9 @@ router.register(r'finish',FinishViewSet,basename='finsh')
 router.register(r'view',ProductViewSet,basename='view')
 
 urlpatterns = [
-    path('',include(router.urls))
+    path('',include(router.urls)),
+    path('products/', ProductListView.as_view(), name='product-list'),
+    path('product/<int:pk>/', ProductDetailView.as_view(), name='product-detail'),
+    path('add-images-and-finishes/<int:pk>', AddImagesAndFinishesView.as_view(), name='add_images_and_finishes'),
+    # path('product/<int:pk>/add-image/', AddProductImageView.as_view(), name='add-product-image'),
 ]

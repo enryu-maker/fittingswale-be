@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Add Product Image</title>
+</head>
+<body>
+    <h1>Add Product Image</h1>
+    <form method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        <label for="finish">Select Finish:</label>
+        <select name="finish" id="finish">
+            {% for finish in finishes %}
+                <option value="{{ finish.id }}">{{ finish.title }}</option>
+            {% endfor %}
+        </select>
+        <br>
+        <label for="images">New Images:</label>
+        <input type="file" name="images" id="images" multiple>
+        <br>
+        <hr>
+        <h3>Edit Existing Images:</h3>
+        {% for product_image in product_images %}
+            <label for="finish_{{ product_image.id }}">Select Finish for {{ product_image.multi_img.image.name }}:</label>
+            <select name="finish_{{ product_image.id }}" id="finish_{{ product_image.id }}">
+                {% for finish in finishes %}
+                    <option value="{{ finish.id }}" {% if product_image.finish.id == finish.id %} selected {% endif %}>{{ finish.title }}</option>
+                {% endfor %}
+            </select>
+            <input type="checkbox" name="existing_images" value="{{ product_image.id }}"> Delete
+            <br>
+        {% endfor %}
+        <br>
+        <input type="submit" value="Save Changes">
+    </form>
+    
+    
+</body>
+</html>
