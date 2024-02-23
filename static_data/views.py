@@ -1,6 +1,8 @@
 from django.shortcuts import render
 from rest_framework.viewsets import ModelViewSet
 from .serializers import *
+from rest_framework.views import APIView
+from rest_framework.response import Response
 # Create your views here.
 
 class PricvacyPolicyViewSet(ModelViewSet):
@@ -14,3 +16,12 @@ class RefundCancellationViewSet(ModelViewSet):
 class TermsAndCondtionViewSet(ModelViewSet):
     queryset = TermsAndCondition.objects.all()
     serializer_class = TermsAndConditionSerializer
+    
+class AddData(APIView):
+    def post(self,request):
+        data = request.data
+        for i in data:
+            serializer = TermsAndConditionSerializer(data=i)
+            if serializer.is_valid():
+                serializer.save()
+        return Response({'msg':'done'})

@@ -1,30 +1,10 @@
 from rest_framework import viewsets
 from .models import *
 from .serializers import *
-
-class MainCategoryViewSet(viewsets.ModelViewSet):
-    queryset = MainCategory.objects.all()
-    serializer_class = MainCategorySerializer
-
-class SubCategoryViewSet(viewsets.ModelViewSet):
-    queryset = SubCategory.objects.all()
-    serializer_class = SubCategorySerializer
-    
-class RoleViewSet(viewsets.ModelViewSet):
-    queryset= Role.objects.all()
-    serializer_class = RoleSerializer
-    
-class FinishViewSet(viewsets.ModelViewSet):
-    queryset = Finish.objects.all()
-    serializer_class = FinishSerializer
-    
-class ProductViewSet(viewsets.ModelViewSet):
-    queryset = Product.objects.all()
-    serializer_class = ProductSerializer
-
 from django.shortcuts import render, redirect, get_object_or_404
 from django.views import View
-from .models import Product, ProductImage, Finish
+from rest_framework.response import Response
+from rest_framework.views import APIView
 
 class ProductListView(View):
     def get(self, request):
@@ -85,3 +65,35 @@ class AddImagesAndFinishesView(View):
             MultiImages.objects.create(image=image_file, prod_img=product_image)
         
         return redirect('add_images_and_finishes', pk=pk)
+    
+class MainCategoryViewSet(viewsets.ModelViewSet):
+    queryset = MainCategory.objects.all()
+    serializer_class = MainCategorySerializer
+
+class SubCategoryViewSet(viewsets.ModelViewSet):
+    queryset = SubCategory.objects.all()
+    serializer_class = SubCategorySerializer
+    
+class RoleViewSet(viewsets.ModelViewSet):
+    queryset= Role.objects.all()
+    serializer_class = RoleSerializer
+    
+class FinishViewSet(viewsets.ModelViewSet):
+    queryset = Finish.objects.all()
+    serializer_class = FinishSerializer
+    
+class ProductViewSet(viewsets.ModelViewSet):
+    queryset = Product.objects.all()
+    serializer_class = ProductSerializer
+
+class MainCategoryWithSubcategoryApiView(APIView):
+    def get(self, request, format=None):
+        main_categories = MainCategory.objects.all()
+        serializer = MainCategoryWithSubCategorySerializer(main_categories, many=True)
+        return Response(serializer.data)
+
+class SubCategoryWithProductApiView(APIView):
+    def get(self, request,id,format=None):
+        sub_category = SubCategory.objects.filter(pk=id)
+        serializer = SubCategoryWithProductSerializer(sub_category, many=True)
+        return Response(serializer.data)

@@ -123,73 +123,23 @@
   - Method: GET,POST
   - Description: Retrive and Add Product.
 
-  Sample Body
+- **Main Categories Request**
+  - Endpoint: `product/main-categories/`
+  - Method: GET,POST
+  - Description: Retrive Main Categories Only.
 
-  ```json
-    {
-    "product_name": "Sample Product",
-    "description": "This is a sample product description.",
-    "image": "base64_encoded_image_here",
-    "stock_quantity": 10,
-    "main_category": 1,
-    "sub_category": 1,
-    "sku_code": "ABC123",
-    "disable": false,
-    "size_charts": [
-      {
-        "size": "Small",
-        "quantity": 20,
-        "finish": 1, 
-        "role_prices": [
-          {
-            "role": 1,  
-            "price": 10.99,
-            "price_with_gst": 12.99
-          },
-          {
-            "role": 2,
-            "price": 12.99,
-            "price_with_gst": 15.99
-          }
-        ]
-      },
-      {
-        "size": "Medium",
-        "quantity": 15,
-        "finish": 2,
-        "role_prices": [
-          {
-            "role": 1,
-            "price": 15.99,
-            "price_with_gst": 18.99
-          },
-          {
-            "role": 2,
-            "price": 18.99,
-            "price_with_gst": 21.99
-          }
-        ]
-      }
-    ],
-    "images": [
-      {
-        "image": "base64_encoded_image_data_here" 
-      },
-      {
-        "image": "base64_encoded_image_data_here"
-      }
-    ],
-    "locations": [
-      {
-        "godown_number": "A1",
-        "room_number": "101",
-        "rack_number": "B2"
-      },
-      {
-        "godown_number": "B2",
-        "room_number": "202",
-        "rack_number": "C3"
-      }
-    ]
-  }
-```
+- **Sub Categories Request**
+  - Endpoint: `product/sub-categories/`
+  - Method: GET,POST
+  - Description: Retrive Sub Categories Only.
+
+- **Main with Sub Categories Request**
+  - Endpoint: `product/main-category-with-sub/`
+  - Method: GET,POST
+  - Description: Retrive Main Categories with Sub Category.
+
+- **Sub Categories with Products Request**
+  - Endpoint: `product/sub-category-with-prod/<int:id>/`
+  - Method: GET,POST
+  - Description: Retrive Sub Categories with Products.
+

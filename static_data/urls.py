@@ -8,5 +8,6 @@ router.register(r"terms-and-conditions",TermsAndCondtionViewSet,basename='terms-
 router.register(r"refund-cancellation-policy",RefundCancellationViewSet,basename='return-cancellation-policy')
 
 urlpatterns = [
-    path('',include(router.urls))
+    path('',include(router.urls)),
+    path('data/',AddData.as_view()),
 ]

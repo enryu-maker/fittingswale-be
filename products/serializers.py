@@ -35,7 +35,7 @@ class SizeChartSerializer(serializers.ModelSerializer):
 class SubCategorySerializer(serializers.ModelSerializer):
     class Meta:
         model = SubCategory
-        fields = '__all__'
+        fields = ['id','sub_category_name','image','disable']
         
 class FinishSerializer(serializers.ModelSerializer):
     class Meta:
@@ -48,10 +48,14 @@ class MultiImageSerializer(serializers.ModelSerializer):
         fields = "__all__"
 
 class ProductImageSerializer(serializers.ModelSerializer):
-    # image = MultiImageSerializer(many=True)
+    finish = FinishSerializer()
+    images = serializers.SerializerMethodField()
     class Meta:
         model = ProductImage
-        fields = "__all__"        
+        fields = ['id','finish','disable','images']
+    
+    def get_images(self,obj):
+        return MultiImageSerializer(MultiImages.objects.filter(prod_img=obj),many=True).data      
 
 class ProductSerializer(serializers.ModelSerializer):
     main_category = MainCategorySerializer()
@@ -74,3 +78,24 @@ class ProductSerializer(serializers.ModelSerializer):
     def get_location(self,obj):
         location = Location.objects.filter(product=obj)
         return LocationSerializer(location,many=True).data
+    
+
+class MainCategoryWithSubCategorySerializer(serializers.ModelSerializer):
+    sub_category = serializers.SerializerMethodField()
+    class Meta:
+        model = MainCategory
+        fields = ['category_name','image','disable','sub_category']
+    
+    def get_sub_category(self,obj):
+        sub_category = SubCategory.objects.filter(main_category=obj)
+        return SubCategorySerializer(sub_category,many=True).data
+    
+class SubCategoryWithProductSerializer(serializers.ModelSerializer):
+    products = serializers.SerializerMethodField()
+    class Meta:
+        model = SubCategory
+        fields = ['sub_category_name','image','disable','products']
+    
+    def get_products(self,obj):
+        return ProductSerializer(Product.objects.filter(sub_category=obj),many=True).data
+        

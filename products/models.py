@@ -18,6 +18,7 @@ class MainCategory(models.Model):
 class SubCategory(models.Model):
     main_category = models.ForeignKey(MainCategory, on_delete=models.CASCADE)
     sub_category_name = models.CharField(max_length=255)
+    image = models.ImageField(upload_to='subcategory', null=True, blank=True)
     disable = models.BooleanField(default=False)
 
     def __str__(self):
