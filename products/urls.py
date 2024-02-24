@@ -15,5 +15,5 @@ urlpatterns = [
     path('sub-category-with-prod/<int:id>/',SubCategoryWithProductApiView.as_view()),
     path('products/', ProductListView.as_view(), name='product-list'),
     path('product/<int:pk>/', ProductDetailView.as_view(), name='product-detail'),
-    path('add-images-and-finishes/<int:pk>', AddImagesAndFinishesView.as_view(), name='add_images_and_finishes'),
+    path('add-images-and-finishes/<int:pk>', AddImagesAndFinishesView.as_view(), name='add-images-and-finishes'),
 ]

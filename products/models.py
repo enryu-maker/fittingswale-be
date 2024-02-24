@@ -3,6 +3,11 @@ from django.utils.translation import gettext_lazy as _
 from django.core.validators import MinValueValidator
 # Create your models here.
 
+from django.db.models.signals import pre_save
+from django.dispatch import receiver
+
+
+
 class Finish(models.Model):
     title = models.CharField(max_length=50)
     def __str__(self):
@@ -68,8 +73,8 @@ class Product(models.Model):
     image = models.ImageField(upload_to='product', null=True, blank=True)
     stock_quantity = models.IntegerField(validators=[MinValueValidator(0)])
     minimum_quantity = models.IntegerField(validators=[MinValueValidator(0)],null=True)
-    main_category = models.ForeignKey(MainCategory, on_delete=models.CASCADE)
     sub_category = models.ForeignKey(SubCategory, on_delete=models.CASCADE)
+    main_category = models.ForeignKey(MainCategory, on_delete=models.CASCADE)
     sku_code = models.CharField(max_length=30,null=True,blank=True)
     DISABLE_CHOICES = [
         ('Activate', 'Activate'),
@@ -109,3 +114,8 @@ class ProductDetail(models.Model):
     product = models.ForeignKey(Product, verbose_name=_("Product"), on_delete=models.CASCADE)
     name = models.CharField(max_length=30)
     value = models.CharField(max_length=50)
+
+@receiver(pre_save, sender=Product)
+def update_main_category(sender, instance, **kwargs):
+    if instance.sub_category:
+        instance.main_category = instance.sub_category.main_category

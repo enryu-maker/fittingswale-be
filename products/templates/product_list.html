@@ -35,6 +35,7 @@
             background-color: #f2f2f2;
             font-weight: bold;
             color: #333333;
+            text-transform: uppercase;
         }
 
         tr:hover {
@@ -49,6 +50,22 @@
         a:hover {
             text-decoration: underline;
         }
+
+        /* Styles for the button */
+        .add-button {
+            background-color: #007bff;
+            color: #fff;
+            border: none;
+            border-radius: 4px;
+            padding: 5px 10px;
+            cursor: pointer;
+            font-size: 14px;
+            text-decoration: none; /* Remove underline */
+        }
+
+        .add-button:hover {
+            background-color: #0056b3;
+        }
     </style>
 </head>
 <body>
@@ -57,12 +74,20 @@
         <thead>
             <tr>
                 <th>Product Name</th>
+                <th>Main Category</th>
+                <th>Sub Category</th>
+                <th>Status</th>
+                <th>Action</th>
             </tr>
         </thead>
         <tbody>
             {% for product in products %}
                 <tr>
-                    <td><a href="{% url 'product-detail' product.pk %}">{{ product.product_name }}</a></td>
+                    <td ><a href="{% url 'product-detail' product.pk %}">{{ product.product_name }}</a></td>
+                    <td >{{product.main_category}}</td>
+                    <td >{{product.sub_category}}</td>
+                    <td >{{product.status}}</td>
+                    <td><a href="{% url 'add-images-and-finishes' product.pk %}" class="add-button">Add Images and Finishes</a></td>
                 </tr>
             {% endfor %}
         </tbody>
