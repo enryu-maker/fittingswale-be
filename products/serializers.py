@@ -1,6 +1,11 @@
 from rest_framework import serializers
 from .models import *
 
+class ProductDetailSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = ProductDetail
+        fields = "__all__"
+
 class RoleSerializer(serializers.ModelSerializer):
     class Meta:
         model = Role
@@ -26,7 +31,7 @@ class SizeChartSerializer(serializers.ModelSerializer):
     price_map = serializers.SerializerMethodField()
     class Meta:
         model = SizeChart
-        fields = ['id','disable','size','quantity','product','finish','price_map']  
+        fields = ['id','status','size','quantity','product','finish','price_map']  
         
     def get_price_map(self,obj):
         price_map = RolePrice.objects.filter(size=obj)
@@ -35,7 +40,7 @@ class SizeChartSerializer(serializers.ModelSerializer):
 class SubCategorySerializer(serializers.ModelSerializer):
     class Meta:
         model = SubCategory
-        fields = ['id','sub_category_name','image','disable']
+        fields = ['id','sub_category_name','image','status']
         
 class FinishSerializer(serializers.ModelSerializer):
     class Meta:
@@ -52,7 +57,7 @@ class ProductImageSerializer(serializers.ModelSerializer):
     images = serializers.SerializerMethodField()
     class Meta:
         model = ProductImage
-        fields = ['id','finish','disable','images']
+        fields = ['id','finish','status','images']
     
     def get_images(self,obj):
         return MultiImageSerializer(MultiImages.objects.filter(prod_img=obj),many=True).data      
@@ -63,9 +68,10 @@ class ProductSerializer(serializers.ModelSerializer):
     product_images = serializers.SerializerMethodField()
     size_chart = serializers.SerializerMethodField()
     location = serializers.SerializerMethodField()
+    product_details =serializers.SerializerMethodField()
     class Meta:
         model = Product
-        fields = ['id','product_name','description','image','stock_quantity','sku_code','disable','main_category','sub_category','size_chart','product_images','location']
+        fields = ['id','product_name','description','image','stock_quantity','sku_code','status','main_category','sub_category','size_chart','product_images','product_details','location']
         
     def get_size_chart(self,obj):
         size_chart = SizeChart.objects.filter(product=obj)
@@ -79,12 +85,16 @@ class ProductSerializer(serializers.ModelSerializer):
         location = Location.objects.filter(product=obj)
         return LocationSerializer(location,many=True).data
     
+    def get_product_details(self,obj):
+        product = ProductDetail.objects.filter(product=obj)
+        return ProductDetailSerializer(product,many=True).data
+    
 
 class MainCategoryWithSubCategorySerializer(serializers.ModelSerializer):
     sub_category = serializers.SerializerMethodField()
     class Meta:
         model = MainCategory
-        fields = ['category_name','image','disable','sub_category']
+        fields = ['category_name','image','status','sub_category']
     
     def get_sub_category(self,obj):
         sub_category = SubCategory.objects.filter(main_category=obj)
@@ -94,7 +104,7 @@ class SubCategoryWithProductSerializer(serializers.ModelSerializer):
     products = serializers.SerializerMethodField()
     class Meta:
         model = SubCategory
-        fields = ['sub_category_name','image','disable','products']
+        fields = ['sub_category_name','image','status','products']
     
     def get_products(self,obj):
         return ProductSerializer(Product.objects.filter(sub_category=obj),many=True).data
