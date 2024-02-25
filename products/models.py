@@ -14,8 +14,8 @@ class Finish(models.Model):
         return self.title
 
 class MainCategory(models.Model):
-    image = models.ImageField(upload_to='category', null=True, blank=True)
-    category_name = models.CharField(max_length=255)
+    image = models.ImageField(upload_to='main_category', null=True, blank=True)
+    main_category_name = models.CharField(max_length=50,null=True)
     DISABLE_CHOICES = [
         ('Activate', 'Activate'),
         ('Inactivate', 'Inactivate'),
@@ -24,11 +24,25 @@ class MainCategory(models.Model):
 
 
     def __str__(self):
+        return self.main_category_name
+
+class Category(models.Model):
+    main_category = models.ForeignKey(MainCategory,on_delete=models.CASCADE,null=True)
+    image = models.ImageField(upload_to='category',null=True,blank=True)
+    category_name = models.CharField(max_length=50,null=True)
+    DISABLE_CHOICES = [
+        ('Activate', 'Activate'),
+        ('Inactivate', 'Inactivate'),
+    ]
+    status = models.CharField(max_length=10, choices=DISABLE_CHOICES, default='Activate')
+    
+    def __str__(self):
         return self.category_name
+    
 
 class SubCategory(models.Model):
-    main_category = models.ForeignKey(MainCategory, on_delete=models.CASCADE)
-    sub_category_name = models.CharField(max_length=255)
+    category = models.ForeignKey(Category, on_delete=models.CASCADE,null=True)
+    sub_category_name = models.CharField(max_length=50)
     image = models.ImageField(upload_to='subcategory', null=True, blank=True)
     DISABLE_CHOICES = [
         ('Activate', 'Activate'),
@@ -69,12 +83,13 @@ class RolePrice(models.Model):
 
 class Product(models.Model):
     product_name = models.CharField(max_length=255)
-    description = models.TextField()
+    description = models.TextField(null=True,blank=True)
     image = models.ImageField(upload_to='product', null=True, blank=True)
     stock_quantity = models.IntegerField(validators=[MinValueValidator(0)])
     minimum_quantity = models.IntegerField(validators=[MinValueValidator(0)],null=True)
     sub_category = models.ForeignKey(SubCategory, on_delete=models.CASCADE)
-    main_category = models.ForeignKey(MainCategory, on_delete=models.CASCADE)
+    category = models.ForeignKey(Category,on_delete=models.CASCADE,null=True)
+    main_category = models.ForeignKey(MainCategory, on_delete=models.CASCADE,null=True)
     sku_code = models.CharField(max_length=30,null=True,blank=True)
     DISABLE_CHOICES = [
         ('Activate', 'Activate'),
@@ -103,7 +118,6 @@ class ProductImage(models.Model):
     def __str__(self):
         return self.product.product_name +"-"+self.finish.title
     
-    
 class Location(models.Model):
     product = models.ForeignKey(Product, verbose_name=_("Product"), on_delete=models.CASCADE)
     godown_number = models.CharField(max_length=30)
@@ -118,4 +132,6 @@ class ProductDetail(models.Model):
 @receiver(pre_save, sender=Product)
 def update_main_category(sender, instance, **kwargs):
     if instance.sub_category:
-        instance.main_category = instance.sub_category.main_category
+        instance.category = instance.sub_category.category
+        print(instance.category)
+        instance.main_category = instance.category.main_category

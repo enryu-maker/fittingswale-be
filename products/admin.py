@@ -7,43 +7,52 @@ class MulitiImageInline(NestedTabularInline):
     model = MultiImages
     extra = 0
     classes = ('collapse',)
+    min_num = 1
  
 class ProductImageInline(NestedTabularInline):
     model = ProductImage
-    extra = 1
+    extra = 0
     classes = ('collapse', )
     inlines = [MulitiImageInline]
+    min_num = 1
 
 class ProductDetailInline(NestedTabularInline):
     model = ProductDetail
-    extra = 1
+    extra = 0
     classes = ('collapse', )
+    min_num = 1
 
 class RolePriceInline(NestedTabularInline):
     model = RolePrice
-    extra = 1
+    extra = 0
     classes = ('collapse', )
+    min_num = 1
     
 class SizeChartInline(NestedTabularInline):
     model = SizeChart
-    extra = 1
+    extra = 0
     inlines = [RolePriceInline,]
     classes = ('collapse', )
+    min_num = 1
     
 class LocationInline(NestedTabularInline):
     model = Location
-    extra = 1
+    extra = 0
     classes = ('collapse', )
+    min_num = 1
 
 class MainCategoryAdmin(admin.ModelAdmin):
-    list_display=['category_name','status']
+    list_display=['main_category_name','status']    
 
 class SubCategoryAdmin(admin.ModelAdmin):
     list_filter = ['status']
-    list_display=['sub_category_name','main_category','status']
+    list_display=['sub_category_name','category','status']
 
 class SizeChartAdmin(admin.ModelAdmin):
     inlines =[RolePriceInline,]
+
+class CategoryAdmin(admin.ModelAdmin):
+    list_display = ['category_name',]
 
 class ProductAdmin(NestedModelAdmin):     
     search_fields = ['product_name']
@@ -60,4 +69,5 @@ admin.site.register(SizeChart,SizeChartAdmin)
 admin.site.register(Location)
 admin.site.register(MultiImages)
 admin.site.register(ProductImage)
+admin.site.register(Category,CategoryAdmin)
 admin.site.register(SubCategory,SubCategoryAdmin)

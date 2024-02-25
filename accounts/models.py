@@ -79,7 +79,7 @@ class User(AbstractBaseUser, PermissionsMixin):
 
     @property
     def get_full_name(self):
-        return name
+        return self.name
 
 
     class Meta:
