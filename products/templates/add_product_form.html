@@ -1,0 +1,498 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Stepper Form</title>
+    <link
+      href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css"
+      rel="stylesheet"
+    />
+    <style>
+      img {
+        width: 100px;
+        height: 100px;
+      }
+      html,
+      body {
+        height: 100%;
+      }
+      input,
+      select,
+      textarea {
+        border: solid;
+        border-width: 1px;
+        border-color: gainsboro;
+      }
+      body {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        background-color: #f3f4f6;
+      }
+
+      .form-container {
+        width: 90%;
+        max-width: 90%;
+        height: 90%;
+        max-height: 90%;
+        overflow: auto;
+        background-color: white;
+        border-radius: 10px;
+        box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+        padding: 20px;
+      }
+
+      #progressBar {
+        transition: width 0.5s ease-in-out; /* Added transition for smoother animation */
+      }
+
+      #imagePreview {
+        max-width: 100%;
+        max-height: 200px;
+        margin-top: 10px;
+      }
+    </style>
+  </head>
+
+  <body>
+    <div class="form-container">
+      <!-- Progress Bar -->
+      <div class="relative mb-8 h-4 bg-gray-200 rounded-full">
+        <div
+          id="progressBar"
+          class="absolute left-0 top-0 h-full rounded-full transition-all duration-500"
+          style="width: calc(20% * var(--step)); background-color: orange"
+        ></div>
+      </div>
+
+      <!-- Steps content -->
+      <!-- Step 1 -->
+      <div id="step1" class="step">
+        <h2 class="text-xl font-bold mb-4">1: Product Profile</h2>
+        <form id="step1">
+          <div class="mb-4">
+            <label>Product Name</label>
+            <input
+              type="text"
+              id="productName"
+              name="productName"
+              required
+              class="mt-1 p-2 block w-full border-gray-300 rounded-md shadow-sm focus:ring-blue focus:border-blue"
+            />
+          </div>
+          <div class="mb-4">
+            <label for="description" class="block">Description</label>
+            <textarea
+              id="description"
+              name="description"
+              class="mt-1 p-2 block w-full border-gray-300 rounded-md shadow-sm focus:ring-blue focus:border-blue"
+              rows="3"
+            ></textarea>
+          </div>
+          <div class="pt-3">
+            <label>Upload Product Icon</label>
+            <input
+              type="file"
+              id="productIcon"
+              name="productIcon"
+              required
+              class="block w-full border-gray-300 p-1 pl-1 bg-white rounded-md shadow-sm focus:ring-blue focus:border-blue"
+            />
+            <img
+              id="imagePreview"
+              src="#"
+              alt="Preview"
+              style="display: none"
+            />
+          </div>
+
+          <div class="mb-4 pt-4">
+            <label for="maincategory" class="block">Main Category</label>
+            <select
+              id="maincategory"
+              name="maincategory"
+              required
+              class="mt-1 p-2 block w-full border-gray-300 rounded-md shadow-sm focus:ring-blue focus:border-blue"
+            >
+              <option value="">Select Main Category</option>
+              <option value="Screw">Latina</option>
+              <option value="Hooks">Blonde</option>
+            </select>
+          </div>
+          <div class="mb-4">
+            <label for="category" class="block">Category</label>
+            <select
+              id="category"
+              name="category"
+              required
+              class="mt-1 p-2 block w-full border-gray-300 rounded-md shadow-sm focus:ring-blue focus:border-blue"
+            >
+              <option value="">Select Category</option>
+              <option value="latina">Latina</option>
+              <option value="blonde">Blonde</option>
+            </select>
+          </div>
+          <div class="mb-4">
+            <label for="subCategory" class="block">Sub Category</label>
+            <select
+              id="subCategory"
+              name="subCategory"
+              required
+              class="mt-1 p-2 block w-full border-gray-300 rounded-md shadow-sm focus:ring-blue focus:border-blue"
+            >
+              <option value="">Select Sub Category</option>
+              <option value="S1">S1</option>
+              <option value="S2">S2</option>
+            </select>
+          </div>
+          <div class="mb-4">
+            <label>Sku Code</label>
+            <input
+              type="number"
+              id="Size"
+              name="Size"
+              required
+              class="mt-1 p-2 block w-full border-gray-300 rounded-md shadow-sm focus:ring-blue focus:border-blue"
+            />
+          </div>
+          <div class="mt-4 pb-5">
+            <label>Status</label>
+            <select
+              name="status"
+              class="mt-1 p-2 block w-full border-gray-300 rounded-md shadow-sm focus:ring-blue focus:border-blue"
+            >
+              <option value="Active">Active</option>
+              <option value="Inactive">Inactive</option>
+            </select>
+          </div>
+
+          <button
+            type="button"
+            onclick="nextStep()"
+            style="background-color: orange"
+            class="bg-blue-500 text-white font-bold py-2 px-4 rounded hover:bg-blue-600"
+          >
+            Next
+          </button>
+        </form>
+      </div>
+
+      <!-- Step 2 -->
+      <div id="step2" class="hidden step">
+        <h2 class="text-xl font-bold mb-4">Step 2: Additional Information</h2>
+        <form id="step2">
+          <div class="mt-4 py-3">
+            <label>Finish</label>
+            <select
+              name="finish"
+              id="finish"
+              required
+              class="mt-1 p-2 block w-full border-gray-300 rounded-md shadow-sm focus:ring-blue focus:border-blue"
+            >
+              <option value="Black">Black</option>
+              <option value="White">White</option>
+              <option value="SS">SS</option>
+            </select>
+          </div>
+          <div class="py-3">
+            <label>Upload Product Photos</label>
+            <input
+              type="file"
+              id="productPhotos"
+              name="productPhotos"
+              onchange="loadFile(event, 'imagePreviewContainer')"
+              multiple
+              required
+              class="block w-full p-1 pl-1 rounded-md shadow-sm focus:ring-blue focus:border-blue"
+            />
+          </div>
+          <div id="imagePreviewContainer" style="display: flex"></div>
+
+          <div id="additionalFields">
+            <!-- Additional fields will be dynamically added here -->
+          </div>
+          <button
+            type="button"
+            onclick="addMoreFields()"
+            class="bg-blue-500 float-right text-white font-bold py-2 px-4 rounded hover:bg-blue-600"
+          >
+            +
+          </button>
+          <button
+            type="button"
+            onclick="prevStep()"
+            class="bg-gray-400 text-white font-bold py-2 px-4 rounded mr-2 hover:bg-gray-500"
+          >
+            Previous
+          </button>
+          <button
+            type="button"
+            onclick="nextStep()"
+            style="background-color: orange"
+            class="text-white font-bold py-2 px-4 rounded hover:bg-blue-600"
+          >
+            Next
+          </button>
+        </form>
+      </div>
+
+      <!-- Step 3 -->
+      <div id="step3" class="hidden step">
+        <h2 class="text-xl font-bold mb-4">Step 3: Educational Information</h2>
+        <form id="step3">
+          <div class="mb-4">
+            <label for="degree" class="block">Degree:</label>
+            <input
+              type="text"
+              id="degree"
+              name="degree"
+              placeholder="Your highest degree"
+              required
+              class="mt-1 p-2 block w-full border-gray-300 rounded-md shadow-sm focus:ring-blue focus:border-blue"
+            />
+          </div>
+          <div class="mb-4">
+            <label for="institution" class="block">Institution:</label>
+            <input
+              type="text"
+              id="institution"
+              name="institution"
+              placeholder="Your institution"
+              required
+              class="mt-1 p-2 block w-full border-gray-300 rounded-md shadow-sm focus:ring-blue focus:border-blue"
+            />
+          </div>
+          <button
+            type="button"
+            onclick="prevStep()"
+            class="bg-gray-400 text-white font-bold py-2 px-4 rounded mr-2 hover:bg-gray-500"
+          >
+            Previous
+          </button>
+          <button
+            type="button"
+            onclick="nextStep()"
+            class="bg-blue-500 text-white font-bold py-2 px-4 rounded hover:bg-blue-600"
+          >
+            Next
+          </button>
+        </form>
+      </div>
+
+      <!-- Step 4 -->
+      <div id="step4" class="hidden step">
+        <h2 class="text-xl font-bold mb-4">Step 4: Work Experience</h2>
+        <form id="step4">
+          <div class="mb-4">
+            <label for="jobTitle" class="block">Job Title:</label>
+            <input
+              type="text"
+              id="jobTitle"
+              name="jobTitle"
+              placeholder="Your job title"
+              required
+              class="mt-1 p-2 block w-full border-gray-300 rounded-md shadow-sm focus:ring-blue focus:border-blue"
+            />
+          </div>
+          <div class="mb-4">
+            <label for="company" class="block">Company:</label>
+            <input
+              type="text"
+              id="company"
+              name="company"
+              placeholder="Your company name"
+              required
+              class="mt-1 p-2 block w-full border-gray-300 rounded-md shadow-sm focus:ring-blue focus:border-blue"
+            />
+          </div>
+          <button
+            type="button"
+            onclick="prevStep()"
+            class="bg-gray-400 text-white font-bold py-2 px-4 rounded mr-2 hover:bg-gray-500"
+          >
+            Previous
+          </button>
+          <button
+            type="button"
+            onclick="nextStep()"
+            class="bg-blue-500 text-white font-bold py-2 px-4 rounded hover:bg-blue-600"
+          >
+            Next
+          </button>
+        </form>
+      </div>
+
+      <!-- Step 5 -->
+      <div id="step5" class="hidden step">
+        <h2 class="text-xl font-bold mb-4">Step 5: Confirmation</h2>
+        <div id="review" class="mb-4"></div>
+        <button
+          type="button"
+          onclick="prevStep()"
+          class="bg-gray-400 text-white font-bold py-2 px-4 rounded mr-2 hover:bg-gray-500"
+        >
+          Previous
+        </button>
+        <button
+          type="button"
+          onclick="submitForm()"
+          class="bg-green-500 text-white font-bold py-2 px-4 rounded hover:bg-green-600"
+        >
+          Submit
+        </button>
+      </div>
+    </div>
+
+    <script>
+    const csrftoken = '{{ csrf_token }}';
+      let currentStep = 1;
+      let additionalFieldsCount = 1;
+
+      function addMoreFields() {
+        additionalFieldsCount++;
+        const additionalFieldsContainer =
+          document.getElementById("additionalFields");
+        const previewId = `preview${additionalFieldsCount}`;
+
+        const template = `
+                <div class="mt-4 py-3">
+                    <label>Finish ${additionalFieldsCount}</label>
+                    <select name="finish${additionalFieldsCount}" id="finish${additionalFieldsCount}" required
+                        class="mt-1 p-2 block w-full border-gray-300 rounded-md shadow-sm focus:ring-blue focus:border-blue">
+                        <option value="Black">Black</option>
+                        <option value="White">White</option>
+                        <option value="SS">SS</option>
+                    </select>
+                </div>
+                <div class="py-3">
+                    <label>Upload Product Photos</label>
+                    <input type="file" id="productPhotos${additionalFieldsCount}" name="productPhotos${additionalFieldsCount}"
+                        onchange="loadFile(event, '${previewId}')" required
+                        multiple class="block w-full p-1 pl-1 rounded-md shadow-sm focus:ring-blue focus:border-blue" />
+                    <div id="${previewId}" class="image-preview"  style="display: flex;"></div> <!-- Assign unique ID to the preview section -->
+                </div>
+            `;
+        additionalFieldsContainer.insertAdjacentHTML("beforeend", template);
+      }
+
+      function prevStep() {
+        removeAdditionalFields();
+      }
+
+      function nextStep() {
+        removeAdditionalFields();
+      }
+
+      function removeAdditionalFields() {
+        additionalFieldsCount = 0;
+        const additionalFieldsContainer =
+          document.getElementById("additionalFields");
+        additionalFieldsContainer.innerHTML = "";
+      }
+
+      function nextStep() {
+        if (currentStep < 5) {
+          const requiredFields = document.querySelectorAll(
+            `#step${currentStep} [required]`
+          );
+          let isValid = true;
+          requiredFields.forEach((field) => {
+            if (!field.value) {
+              isValid = false;
+              field.classList.add("border-red-500");
+            } else {
+              field.classList.remove("border-red-500");
+            }
+          });
+
+          if (isValid) {
+            document
+              .getElementById(`step${currentStep}`)
+              .classList.add("hidden");
+            currentStep++;
+            document
+              .getElementById(`step${currentStep}`)
+              .classList.remove("hidden");
+          }
+        }
+        updateProgress();
+      }
+
+      function prevStep() {
+        if (currentStep > 1) {
+          document.getElementById(`step${currentStep}`).classList.add("hidden");
+          currentStep--;
+          document
+            .getElementById(`step${currentStep}`)
+            .classList.remove("hidden");
+        }
+        updateProgress();
+      }
+
+      function submitForm() {
+        const formData = new FormData();
+        document.querySelectorAll('.step').forEach(step => {
+            step.querySelectorAll('input, select, textarea').forEach(input => {
+                formData.append(input.name, input.value);
+            });
+        });
+
+        for (var pair of formData.entries()) {
+            console.log(pair[0] + ': ' + pair[1]);
+        }
+        fetch("{% url 'add' %}", {
+            method: 'POST',
+            headers: {
+                'X-CSRFToken':  csrftoken
+            },
+            body: formData
+        })
+        .then(response => {
+            console.log("dhsa")
+        })
+        .catch(error => {
+            console.log("dhsa")
+        });
+        nextStep();
+      }
+
+      function updateProgress() {
+        document.documentElement.style.setProperty("--step", currentStep);
+      }
+
+      let currentStepImagePreviewContainer;
+
+      function loadFile(event, previewId) {
+        const files = event.target.files;
+        const imagePreviewContainer = document.getElementById(previewId);
+
+        if (!imagePreviewContainer) {
+          currentStepImagePreviewContainer = document.getElementById(
+            "imagePreviewContainer"
+          );
+        } else {
+          currentStepImagePreviewContainer = imagePreviewContainer;
+        }
+
+        currentStepImagePreviewContainer.innerHTML = "";
+
+        for (let i = 0; i < files.length; i++) {
+          const file = files[i];
+          const reader = new FileReader();
+
+          reader.onload = function (e) {
+            const imagePreview = document.createElement("img");
+            imagePreview.src = e.target.result;
+            imagePreview.alt = "Image Preview";
+            imagePreview.classList.add("my-2");
+
+            currentStepImagePreviewContainer.appendChild(imagePreview);
+          };
+
+          reader.readAsDataURL(file);
+        }
+      }
+    </script>
+  </body>
+</html>

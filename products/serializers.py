@@ -16,10 +16,23 @@ class LocationSerializer(serializers.ModelSerializer):
         model = Location
         fields = "__all__"
         
+class CategorySerializer(serializers.ModelSerializer):
+    sub_category = serializers.SerializerMethodField()
+    class Meta:
+        model = Category
+        fields = ['id','category_name','status','sub_category']
+        
+    def get_sub_category(self,obj):
+        return SubCategorySerializer(SubCategory.objects.filter(category=obj),many=True).data
+        
 class MainCategorySerializer(serializers.ModelSerializer):
+    category = serializers.SerializerMethodField()
     class Meta:
         model = MainCategory
-        fields = '__all__'
+        fields = ['id','main_category_name','image','status','category']
+        
+    def get_category(self,obj):
+        return CategorySerializer(Category.objects.filter(main_category=obj),many=True).data
      
 class RolePriceSerializer(serializers.ModelSerializer):
     role = RoleSerializer()

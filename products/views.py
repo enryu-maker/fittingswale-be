@@ -1,3 +1,4 @@
+import json
 from rest_framework import viewsets
 from .models import *
 from .serializers import *
@@ -5,6 +6,9 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.views import View
 from rest_framework.response import Response
 from rest_framework.views import APIView
+from django.http import JsonResponse
+from django.contrib.auth.mixins import LoginRequiredMixin
+
 
 class ProductListView(View):
     def get(self, request):
@@ -65,6 +69,21 @@ class AddImagesAndFinishesView(View):
             MultiImages.objects.create(image=image_file, prod_img=product_image)
         
         return redirect('add_images_and_finishes', pk=pk)
+    
+    
+class AddProductView(View):
+    # LoginRequiredMixin
+    # login_url = "login"
+    def get(self, request):
+        return render(request,template_name="add_product_form.html")
+    
+    def post(self,request):
+        if request.method == 'POST':
+            forms_data = request.POST
+            print(forms_data)
+            return render(request,template_name='add_product_form.html')
+        else:
+            return JsonResponse({"error": "Invalid request method"}, status=400)
     
 class MainCategoryViewSet(viewsets.ModelViewSet):
     queryset = MainCategory.objects.all()
