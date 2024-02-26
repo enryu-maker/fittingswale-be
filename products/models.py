@@ -66,8 +66,10 @@ class SizeChart(models.Model):
     ]
     status = models.CharField(max_length=10, choices=DISABLE_CHOICES, default='Activate')
     product = models.ForeignKey('Product', on_delete=models.CASCADE)
-    size = models.CharField(max_length=255)
+    size = models.CharField(max_length=255,null=True)
     quantity = models.IntegerField(null=True)
+    stock_quantity = models.IntegerField(validators=[MinValueValidator(0)],null=True)
+    minimum_quantity = models.IntegerField(validators=[MinValueValidator(0)],null=True)
     finish = models.ForeignKey(Finish,on_delete=models.CASCADE,null=True)
     def __str__(self):
         return f"{self.product.product_name} - {self.size}"
@@ -85,8 +87,6 @@ class Product(models.Model):
     product_name = models.CharField(max_length=255)
     description = models.TextField(null=True,blank=True)
     image = models.ImageField(upload_to='product', null=True, blank=True)
-    stock_quantity = models.IntegerField(validators=[MinValueValidator(0)])
-    minimum_quantity = models.IntegerField(validators=[MinValueValidator(0)],null=True)
     sub_category = models.ForeignKey(SubCategory, on_delete=models.CASCADE)
     category = models.ForeignKey(Category,on_delete=models.CASCADE,null=True)
     main_category = models.ForeignKey(MainCategory, on_delete=models.CASCADE,null=True)
@@ -123,11 +123,20 @@ class Location(models.Model):
     godown_number = models.CharField(max_length=30)
     room_number=models.CharField(max_length=30)
     rack_number=models.CharField(max_length=30)
+    size = models.ForeignKey(SizeChart,on_delete=models.CASCADE,null=True)
+    
+    def __str__(self):
+        return self.product.product_name+" - Location"
+    
 
 class ProductDetail(models.Model):
     product = models.ForeignKey(Product, verbose_name=_("Product"), on_delete=models.CASCADE)
     name = models.CharField(max_length=30)
     value = models.CharField(max_length=50)
+    
+    def __str__(self):
+        return self.product.product_name+" - "+self.name
+    
 
 @receiver(pre_save, sender=Product)
 def update_main_category(sender, instance, **kwargs):

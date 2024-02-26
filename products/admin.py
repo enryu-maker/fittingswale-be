@@ -2,7 +2,8 @@ from django.contrib import admin
 from .models import *
 from django import forms
 from nested_admin import NestedTabularInline, NestedModelAdmin
-    
+from django.utils.html import format_html    
+
 class MulitiImageInline(NestedTabularInline):
     model = MultiImages
     extra = 0
@@ -55,10 +56,24 @@ class CategoryAdmin(admin.ModelAdmin):
     list_display = ['category_name',]
 
 class ProductAdmin(NestedModelAdmin):     
+    
+    def colored_status(self, obj):
+        colors = {
+            'Activate': 'green',
+            'Inactivate': 'red',
+        }
+        return format_html(
+            '<span style="background-color:{}; padding: 3px; border-radius: 3px; color: white;">{}</span>',
+            colors[obj.status],
+            obj.status,
+        )
+    colored_status.short_description = 'Status'
+    
     search_fields = ['product_name']
     list_filter = ['status','main_category']
-    list_display=['id','product_name','main_category','sub_category','stock_quantity','status']
+    list_display=['id','product_name','main_category','sub_category','colored_status','status']
     inlines=[ProductImageInline,ProductDetailInline,SizeChartInline,LocationInline]
+    
 
 admin.site.register(RolePrice)
 admin.site.register(Product,ProductAdmin)
