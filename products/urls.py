@@ -11,8 +11,6 @@ router.register(r'view',ProductViewSet,basename='view')
 
 urlpatterns = [
     path('',include(router.urls)),
-    path('main-category-with-sub/',MainCategoryWithSubcategoryApiView.as_view()),
-    path('sub-category-with-prod/<int:id>/',SubCategoryWithProductApiView.as_view()),
     path('products/', ProductListView.as_view(), name='product-list'),
     path('add/', AddProductView.as_view(), name='add'),
     path('product/<int:pk>/', ProductDetailView.as_view(), name='product-detail'),
