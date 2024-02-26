@@ -17,20 +17,15 @@ class ProductListView(View):
 
 class ProductDetailView(View):
     def get(self, request, pk):
-        # Get the product with the specified primary key
         product = get_object_or_404(Product, pk=pk)
         sub_category = SubCategory.objects.all()
         main_category = MainCategory.objects.all()
-        # Retrieve related objects for the product
         product_image = ProductImage.objects.filter(product=product)
         product_image_with_finish = MultiImages.objects.filter(prod_img__in=product_image)
         product_detail = ProductDetail.objects.filter(product=product)
         size_chart = SizeChart.objects.filter(product=product)
         prices_with_size_chart = RolePrice.objects.filter(size__in=size_chart)
         location = Location.objects.filter(product=product)
-        # print()
-        
-        # Render the template with the retrieved data
         return render(request, 'product_detail.html', {
             'sub_categories':sub_category,
             'main_categories':main_category,
@@ -72,8 +67,6 @@ class AddImagesAndFinishesView(View):
     
     
 class AddProductView(View):
-    # LoginRequiredMixin
-    # login_url = "login"
     def get(self, request):
         return render(request,template_name="add_product_form.html")
     
