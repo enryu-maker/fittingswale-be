@@ -34,6 +34,12 @@ CSRF_TRUSTED_ORIGINS=[
     "https://api-nerdtech.fittingswale.in/"
 ]
 
+CORS_ALLOWED_ORIGINS = [
+    "https://api-nerdtech.fittingswale.in/",
+    "http://localhost:3000",
+    "http://127.0.0.1:8000",
+]
+
 # Application definition
 
 INSTALLED_APPS = [
@@ -44,6 +50,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    "corsheaders",
     'accounts',
     'rest_framework',
     'rest_framework_simplejwt',
@@ -58,6 +65,7 @@ MIDDLEWARE = [
     'whitenoise.middleware.WhiteNoiseMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
+    "corsheaders.middleware.CorsMiddleware",
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
