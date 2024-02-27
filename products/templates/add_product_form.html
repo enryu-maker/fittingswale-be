@@ -345,7 +345,7 @@
     </div>
 
     <script>
-    const csrftoken = '{{ csrf_token }}';
+      const csrftoken = "{{ csrf_token }}";
       let currentStep = 1;
       let additionalFieldsCount = 1;
 
@@ -432,28 +432,28 @@
 
       function submitForm() {
         const formData = new FormData();
-        document.querySelectorAll('.step').forEach(step => {
-            step.querySelectorAll('input, select, textarea').forEach(input => {
-                formData.append(input.name, input.value);
-            });
+        document.querySelectorAll(".step").forEach((step) => {
+          step.querySelectorAll("input, select, textarea").forEach((input) => {
+            formData.append(input.name, input.value);
+          });
         });
 
         for (var pair of formData.entries()) {
-            console.log(pair[0] + ': ' + pair[1]);
+          console.log(pair[0] + ": " + pair[1]);
         }
         fetch("{% url 'add' %}", {
-            method: 'POST',
-            headers: {
-                'X-CSRFToken':  csrftoken
-            },
-            body: formData
+          method: "POST",
+          headers: {
+            "X-CSRFToken": csrftoken,
+          },
+          body: formData,
         })
-        .then(response => {
-            console.log("dhsa")
-        })
-        .catch(error => {
-            console.log("dhsa")
-        });
+          .then((response) => {
+            console.log("dhsa");
+          })
+          .catch((error) => {
+            console.log("dhsa");
+          });
         nextStep();
       }
 

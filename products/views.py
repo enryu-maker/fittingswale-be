@@ -8,6 +8,7 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 from django.http import JsonResponse
 from django.contrib.auth.mixins import LoginRequiredMixin
+from rest_framework import status
 
 
 class ProductListView(View):
@@ -94,10 +95,15 @@ class FinishViewSet(viewsets.ModelViewSet):
     queryset = Finish.objects.all()
     serializer_class = FinishSerializer
     
-class ProductViewSet(viewsets.ModelViewSet):
-    queryset = Product.objects.all()
-    serializer_class = ProductSerializer
-
+class ProductAPIView(APIView):
+    def get(self,request,id,role_id):
+        try:
+            product = Product.objects.get(pk=id)
+            serializer = ProductSerializer(product,context={'role_id': role_id})
+            return Response(serializer.data)
+        except:
+            return Response({'msg':'product not found'},status=status.HTTP_404_NOT_FOUND)
+    
 class MainCategoryWithSubcategoryApiView(APIView):
     def get(self, request, format=None):
         main_categories = MainCategory.objects.all()
@@ -105,7 +111,7 @@ class MainCategoryWithSubcategoryApiView(APIView):
         return Response(serializer.data)
 
 class SubCategoryWithProductApiView(APIView):
-    def get(self, request,id,format=None):
-        sub_category = SubCategory.objects.filter(pk=id)
-        serializer = SubCategoryWithProductSerializer(sub_category, many=True)
+    def get(self, request,sub_id,role_id,format=None):
+        sub_category = SubCategory.objects.filter(pk=sub_id)
+        serializer = SubCategoryProductSerializer(sub_category, many=True,context={'role_id': role_id})
         return Response(serializer.data)

@@ -47,7 +47,12 @@ class SizeChartSerializer(serializers.ModelSerializer):
         fields = ['id','status','size','quantity','finish','price_map']  
         
     def get_price_map(self,obj):
-        price_map = RolePrice.objects.filter(size=obj)
+        role_id = 1 if self.context.get('role_id') is None else self.context.get('role_id')
+        try:
+            role = Role.objects.get(pk=role_id)
+        except:
+            role = Role.objects.get(pk=1)
+        price_map = RolePrice.objects.filter(size=obj,role=role)
         return RolePriceSerializer(price_map,many=True).data
 
 class SubCategorySerializer(serializers.ModelSerializer):
@@ -85,8 +90,9 @@ class ProductSerializer(serializers.ModelSerializer):
         fields = ['id','product_name','description','image','sku_code','status','size_chart','product_images','product_details','location']
         
     def get_size_chart(self,obj):
+        role_id = self.context.get('role_id')
         size_chart = SizeChart.objects.filter(product=obj)
-        return SizeChartSerializer(size_chart,many=True).data
+        return SizeChartSerializer(size_chart,many=True,context={'role_id': role_id}).data
     
     def get_product_images(self,obj):
         images = ProductImage.objects.filter(product=obj)
@@ -109,4 +115,5 @@ class SubCategoryProductSerializer(serializers.ModelSerializer):
         fields = ['id','sub_category_name','image','products']
         
     def get_products(self,obj):
-        return ProductSerializer(Product.objects.filter(sub_category=obj),many=True).data
+        role_id = self.context.get('role_id')
+        return ProductSerializer(Product.objects.filter(sub_category=obj),many=True,context={'role_id': role_id}).data

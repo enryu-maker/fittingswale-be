@@ -17,6 +17,7 @@ from django.contrib.auth.tokens import default_token_generator
 from django.contrib.auth import authenticate
 from django.utils.encoding import smart_str
 from rest_framework.viewsets import ModelViewSet
+from products.models import Role
 import random
 import string
 
@@ -87,6 +88,8 @@ class LoginUserAPIView(APIView):
         user = authenticate(email=email, password=password)
         if user and user.is_trusty:
             tokens = get_tokens_for_user(user)
+            role_id = Role.objects.get(title=user.role).id
+            tokens['user_role'] = role_id
             return Response(tokens)
         return Response({'msg': 'Invalid credentials'}, status=status.HTTP_401_UNAUTHORIZED)
 

@@ -7,11 +7,12 @@ router.register(r'main-categories', MainCategoryViewSet,basename='main-categorie
 router.register(r'sub-categories', SubCategoryViewSet,basename='sub-categories')
 router.register(r'roles',RoleViewSet,basename='role')
 router.register(r'finish',FinishViewSet,basename='finsh')
-router.register(r'view',ProductViewSet,basename='view')
 
 urlpatterns = [
     path('',include(router.urls)),
     path('products/', ProductListView.as_view(), name='product-list'),
+    path('view/<int:id>/<int:role_id>/', ProductAPIView.as_view(), name='product-list'),
+    path('sub-cat/<int:sub_id>/<int:role_id>/', SubCategoryWithProductApiView.as_view(), name='product-list'),
     path('add/', AddProductView.as_view(), name='add'),
     path('product/<int:pk>/', ProductDetailView.as_view(), name='product-detail'),
     path('add-images-and-finishes/<int:pk>', AddImagesAndFinishesView.as_view(), name='add-images-and-finishes'),
