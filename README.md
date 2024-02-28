@@ -143,3 +143,21 @@
   - Method: GET,POST
   - Description: Retrive Sub Categories with Products.
 
+- **Payment Gateway**
+  - Endpoint: `product/paymenttransactions/`
+  - Method: POST
+  - Description: Order Payment Gateway
+  - Body
+  
+  ```json
+  {
+    "currency": "INR",
+    "payment_method": "cod",
+    "payment_date": "2024-02-29T12:00:00",
+    "items": "items list",
+    "subtotal": "sub total dict",
+    "subtotal_qty": "sub qty dict",
+    "address": "address dict",
+    "total": "30.00"
+}
+  ```

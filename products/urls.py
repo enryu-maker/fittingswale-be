@@ -16,4 +16,5 @@ urlpatterns = [
     path('add/', AddProductView.as_view(), name='add'),
     path('product/<int:pk>/', ProductDetailView.as_view(), name='product-detail'),
     path('add-images-and-finishes/<int:pk>', AddImagesAndFinishesView.as_view(), name='add-images-and-finishes'),
+    path('paymenttransactions/', PaymentTransactionAPIView.as_view(), name='payment_transactions_api'),
 ]

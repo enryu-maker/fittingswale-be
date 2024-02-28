@@ -115,3 +115,11 @@ class SubCategoryWithProductApiView(APIView):
         sub_category = SubCategory.objects.filter(pk=sub_id)
         serializer = SubCategoryProductSerializer(sub_category, many=True,context={'role_id': role_id})
         return Response(serializer.data)
+    
+class PaymentTransactionAPIView(APIView):
+    def post(self, request):
+        serializer = PaymentTransactionSerializer(data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)

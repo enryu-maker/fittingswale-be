@@ -3,8 +3,8 @@ from django.utils.translation import gettext_lazy as _
 from django.core.validators import MinValueValidator
 from django.db.models.signals import pre_save
 from django.dispatch import receiver
-
-
+from django.conf import settings
+import uuid
 
 class Finish(models.Model):
     title = models.CharField(max_length=50)
@@ -19,8 +19,7 @@ class MainCategory(models.Model):
         ('Inactivate', 'Inactivate'),
     ]
     status = models.CharField(max_length=10, choices=DISABLE_CHOICES, default='Activate')
-
-
+    
     def __str__(self):
         return self.main_category_name
 
@@ -36,7 +35,6 @@ class Category(models.Model):
     
     def __str__(self):
         return self.category_name
-    
 
 class SubCategory(models.Model):
     category = models.ForeignKey(Category, on_delete=models.CASCADE,null=True)
@@ -47,8 +45,7 @@ class SubCategory(models.Model):
         ('Inactivate', 'Inactivate'),
     ]
     status = models.CharField(max_length=10, choices=DISABLE_CHOICES, default='Activate')
-
-
+    
     def __str__(self):
         return self.sub_category_name
 
@@ -135,6 +132,37 @@ class ProductDetail(models.Model):
     def __str__(self):
         return self.product.product_name+" - "+self.name
     
+class PaymentTransaction(models.Model):
+    PAYMENT_METHOD_CHOICES = [
+        ('credit_card', 'Credit Card'),
+        ('paypal', 'PayPal'),
+        ('bank_transfer', 'Bank Transfer'), 
+        ('cod', 'COD'),
+    ]
+
+    STATUS_CHOICES = [
+        ('pending', 'Pending'),
+        ('completed', 'Completed'),
+        ('failed', 'Failed'),
+    ]
+
+    user = models.ForeignKey(settings.AUTH_USER_MODEL,on_delete=models.CASCADE)
+    currency = models.CharField(max_length=3)
+    payment_method = models.CharField(max_length=20, choices=PAYMENT_METHOD_CHOICES)
+    transaction_id = models.CharField(max_length=100,null=True,blank=True)
+    status = models.CharField(max_length=20, choices=STATUS_CHOICES, default='pending')
+    payment_date = models.DateTimeField(auto_now_add=True)
+    items = models.TextField()
+    subtotal = models.TextField()
+    subtotal_qty = models.TextField()
+    address = models.TextField()
+    muid = models.UUIDField(default=uuid.uuid4, editable=False, unique=True)
+    total = models.DecimalField(decimal_places=2,max_digits=20)
+    
+    def save(self, *args, **kwargs):
+        if not self.transaction_id:
+            self.transaction_id = str(uuid.uuid4())[:8]  # Generate a random 8-character string as transaction ID
+        super().save(*args, **kwargs)
 
 @receiver(pre_save, sender=Product)
 def update_main_category(sender, instance, **kwargs):

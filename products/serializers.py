@@ -117,3 +117,8 @@ class SubCategoryProductSerializer(serializers.ModelSerializer):
     def get_products(self,obj):
         role_id = self.context.get('role_id')
         return ProductSerializer(Product.objects.filter(sub_category=obj),many=True,context={'role_id': role_id}).data
+    
+class PaymentTransactionSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = PaymentTransaction
+        fields = '__all__'
