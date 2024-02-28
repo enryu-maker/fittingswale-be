@@ -148,7 +148,7 @@
   - Method: POST
   - Description: Order Payment Gateway
   - Body
-  
+
   ```json
   {
     "currency": "INR",
