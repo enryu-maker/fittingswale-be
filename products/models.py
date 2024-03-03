@@ -63,8 +63,6 @@ class SizeChart(models.Model):
     product = models.ForeignKey('Product', on_delete=models.CASCADE)
     size = models.CharField(max_length=255,null=True)
     quantity = models.IntegerField(null=True)
-    stock_quantity = models.IntegerField(validators=[MinValueValidator(0)],null=True)
-    minimum_quantity = models.IntegerField(validators=[MinValueValidator(0)],null=True)
     finish = models.ForeignKey(Finish,on_delete=models.CASCADE,null=True)
     def __str__(self):
         return f"{self.product.product_name} - {self.size}"
@@ -114,7 +112,7 @@ class ProductImage(models.Model):
         return self.product.product_name +"-"+self.finish.title
     
 class Location(models.Model):
-    product = models.ForeignKey(Product, verbose_name=_("Product"), on_delete=models.CASCADE)
+    # product = models.ForeignKey(Product, verbose_name=_("Product"), on_delete=models.CASCADE)
     godown_number = models.CharField(max_length=30)
     room_number=models.CharField(max_length=30)
     rack_number=models.CharField(max_length=30)
@@ -163,6 +161,11 @@ class PaymentTransaction(models.Model):
         if not self.transaction_id:
             self.transaction_id = str(uuid.uuid4())[:8]  # Generate a random 8-character string as transaction ID
         super().save(*args, **kwargs)
+
+class Stock(models.Model):
+    size_chart = models.OneToOneField(SizeChart, on_delete=models.CASCADE, related_name='stock_quantity')
+    stock_quantity = models.IntegerField(validators=[MinValueValidator(0)],null=True)
+    minimum_quantity = models.IntegerField(validators=[MinValueValidator(0)],null=True)
 
 @receiver(pre_save, sender=Product)
 def update_main_category(sender, instance, **kwargs):

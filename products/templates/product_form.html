@@ -1,0 +1,63 @@
+<!-- product_form.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Add Product</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script>
+        $(document).ready(function() {
+            $('.add-image').click(function() {
+                var index = $('.product-image-form').length;
+                var newRow = $('.product-image-form:first').clone();
+                newRow.find(':input').val('');
+                newRow.find('.delete-image').show();
+                newRow.find('.multi-image-form').not(':first').remove(); // Remove additional multi-image forms
+                newRow.insertAfter('.product-image-form:last');
+            });
+
+            $(document).on('click', '.add-multi-image', function() {
+                var newRow = $(this).closest('.product-image-form').find('.multi-image-form:first').clone();
+                newRow.find(':input').val('');
+                newRow.find('.delete-multi-image').show();
+                $(this).closest('.product-image-form').find('.multi-image-form:last').after(newRow);
+            });
+
+            $(document).on('click', '.delete-image', function() {
+                $(this).closest('.product-image-form').remove();
+            });
+
+            $(document).on('click', '.delete-multi-image', function() {
+                var multiImageForms = $(this).closest('.product-image-form').find('.multi-image-form');
+                if (multiImageForms.length > 1) {
+                    $(this).closest('.multi-image-form').remove();
+                }
+            });
+        });
+    </script>
+</head>
+<body>
+    <h1>Add Product</h1>
+    <form method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <h2>Add Product Images</h2>
+        {% for subform in formset %}
+            <div class="product-image-form">
+                {{ subform.as_p }}
+                <button type="button" class="add-multi-image">Add Multi Image</button>
+                <button type="button" class="delete-image">Delete Image</button>
+                <div class="multi-image-form">
+                    {{ subform.multiimages_set.management_form }}
+                    {% for multi_image_form in subform.multiimages_set.forms %}
+                        {{ multi_image_form.as_p }}
+                        <button type="button" class="delete-multi-image">Delete Multi Image</button>
+                    {% endfor %}
+                </div>
+            </div>
+        {% endfor %}
+        <button type="button" class="add-image">Add Image</button>
+        <button type="submit">Submit</button>
+    </form>
+</body>
+</html>

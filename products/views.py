@@ -9,7 +9,8 @@ from rest_framework.views import APIView
 from django.http import JsonResponse
 from django.contrib.auth.mixins import LoginRequiredMixin
 from rest_framework import status
-
+from django.forms import inlineformset_factory
+from .forms import ProductForm, ProductImageForm,MultiImageForm
 
 class ProductListView(View):
     def get(self, request):
@@ -87,6 +88,10 @@ class SubCategoryViewSet(viewsets.ModelViewSet):
     queryset = SubCategory.objects.all()
     serializer_class = SubCategoryProductSerializer
     
+class CategoryViewSet(viewsets.ModelViewSet):
+    queryset = Category.objects.all()
+    serializer_class = CategorySerializer
+    
 class RoleViewSet(viewsets.ModelViewSet):
     queryset= Role.objects.all()
     serializer_class = RoleSerializer
@@ -123,3 +128,30 @@ class PaymentTransactionAPIView(APIView):
             serializer.save()
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    
+    
+class ProductCreateView(View):
+    def get(self, request):
+        ProductImageFormSet = inlineformset_factory(Product, ProductImage, form=ProductImageForm, extra=1, can_delete=False, min_num=1, validate_min=True)
+        form = ProductForm()
+        formset = ProductImageFormSet()
+        return render(request, 'product_form.html', {'form': form, 'formset': formset})
+
+    def post(self, request):
+        ProductImageFormSet = inlineformset_factory(Product, ProductImage, form=ProductImageForm, extra=1, can_delete=False, min_num=1, validate_min=True)
+        MultiImageFormSet = inlineformset_factory(ProductImage, MultiImages, form=MultiImageForm, extra=1, can_delete=False, min_num=1, validate_min=True)
+        form = ProductForm(request.POST)
+        formset = ProductImageFormSet(request.POST)
+        if form.is_valid() and formset.is_valid():
+            product = form.save(commit=False)
+            product.save()
+            formset.instance = product
+            instances = formset.save(commit=False)
+            for instance in instances:
+                instance.product = product
+                instance.save()
+                multi_image_formset = MultiImageFormSet(request.POST, request.FILES, instance=instance)
+                if multi_image_formset.is_valid():
+                    multi_image_formset.save()
+            return redirect('success_url')
+        return render(request, 'product_form.html', {'form': form, 'formset': formset})

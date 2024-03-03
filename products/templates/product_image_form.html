@@ -1,0 +1,8 @@
+<!-- product_image_form.html -->
+{{ form.as_p }}
+<div class="multi-image-form">
+    {{ form.multiimages_set.management_form }}
+    {% for multi_image_form in form.multiimages_set.forms %}
+        {{ multi_image_form.as_p }}
+    {% endfor %}
+</div>
