@@ -112,7 +112,7 @@ class ProductImage(models.Model):
         return self.product.product_name +"-"+self.finish.title
     
 class Location(models.Model):
-    product = models.ForeignKey(Product, verbose_name=_("Product"), on_delete=models.CASCADE)
+    # product = models.ForeignKey(Product, verbose_name=_("Product"), on_delete=models.CASCADE)
     godown_number = models.CharField(max_length=30)
     room_number=models.CharField(max_length=30)
     rack_number=models.CharField(max_length=30)

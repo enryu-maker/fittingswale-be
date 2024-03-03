@@ -4,6 +4,7 @@ from .views import *
 
 router = DefaultRouter()
 router.register(r'main-categories', MainCategoryViewSet,basename='main-categories')
+router.register(r'categories', CategoryViewSet,basename='categories')
 router.register(r'sub-categories', SubCategoryViewSet,basename='sub-categories')
 router.register(r'roles',RoleViewSet,basename='role')
 router.register(r'finish',FinishViewSet,basename='finsh')

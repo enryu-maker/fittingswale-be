@@ -29,16 +29,17 @@ class RolePriceInline(NestedTabularInline):
     classes = ('collapse', )
     min_num = 1
     
-class SizeChartInline(NestedTabularInline):
-    model = SizeChart
-    extra = 0
-    inlines = [RolePriceInline,]
-    classes = ('collapse', )
-    min_num = 1
     
 class LocationInline(NestedTabularInline):
     model = Location
     extra = 0
+    classes = ('collapse', )
+    min_num = 1
+    
+class SizeChartInline(NestedTabularInline):
+    model = SizeChart
+    extra = 0
+    inlines = [RolePriceInline,LocationInline]
     classes = ('collapse', )
     min_num = 1
 
@@ -72,7 +73,7 @@ class SubCategoryAdmin(admin.ModelAdmin):
     list_display=['sub_category_name','category','colored_status']
 
 class SizeChartAdmin(admin.ModelAdmin):
-    inlines =[RolePriceInline,]
+    inlines =[RolePriceInline,LocationInline]
 
 class CategoryAdmin(admin.ModelAdmin):
     def colored_status(self, obj):
@@ -105,7 +106,7 @@ class ProductAdmin(NestedModelAdmin):
     search_fields = ['product_name']
     list_filter = ['status','main_category']
     list_display=['id','product_name','main_category','sub_category','colored_status']
-    inlines=[ProductImageInline,ProductDetailInline,SizeChartInline,LocationInline]
+    inlines=[ProductImageInline,ProductDetailInline,SizeChartInline]
     
 class StockAdmin(admin.ModelAdmin):
     list_display= ['size_chart','minimum_quantity','stock_quantity']

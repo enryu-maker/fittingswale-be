@@ -88,6 +88,10 @@ class SubCategoryViewSet(viewsets.ModelViewSet):
     queryset = SubCategory.objects.all()
     serializer_class = SubCategoryProductSerializer
     
+class CategoryViewSet(viewsets.ModelViewSet):
+    queryset = Category.objects.all()
+    serializer_class = CategorySerializer
+    
 class RoleViewSet(viewsets.ModelViewSet):
     queryset= Role.objects.all()
     serializer_class = RoleSerializer
