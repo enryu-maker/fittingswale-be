@@ -11,4 +11,5 @@ urlpatterns = [
     path('register/',RegisterUserAPIView.as_view()),
     path('edit-profile/',EditUserAPIView.as_view()),
     path('google-login/',GoogleLoginAPIView.as_view()),
+    path('address/<int:pk>/',UserAddressAPIView.as_view(),name="user_adress"),
 ]

@@ -83,11 +83,10 @@ class ProductImageSerializer(serializers.ModelSerializer):
 class ProductSerializer(serializers.ModelSerializer):
     product_images = serializers.SerializerMethodField()
     size_chart = serializers.SerializerMethodField()
-    location = serializers.SerializerMethodField()
     product_details =serializers.SerializerMethodField()
     class Meta:
         model = Product
-        fields = ['id','product_name','description','image','sku_code','status','size_chart','product_images','product_details','location']
+        fields = ['id','product_name','description','image','sku_code','status','size_chart','product_images','product_details']
         
     def get_size_chart(self,obj):
         role_id = self.context.get('role_id')
@@ -97,10 +96,6 @@ class ProductSerializer(serializers.ModelSerializer):
     def get_product_images(self,obj):
         images = ProductImage.objects.filter(product=obj)
         return ProductImageSerializer(images,many=True).data
-    
-    def get_location(self,obj):
-        location = Location.objects.filter(product=obj)
-        return LocationSerializer(location,many=True).data
     
     def get_product_details(self,obj):
         product = ProductDetail.objects.filter(product=obj)
