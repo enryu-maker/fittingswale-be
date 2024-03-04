@@ -119,7 +119,7 @@ class Location(models.Model):
     size = models.ForeignKey(SizeChart,on_delete=models.CASCADE,null=True)
     
     def __str__(self):
-        return self.product.product_name+" - Location"
+        return self.size.size+" - Location"
     
 
 class ProductDetail(models.Model):
