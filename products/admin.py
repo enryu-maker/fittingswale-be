@@ -109,7 +109,7 @@ class ProductAdmin(NestedModelAdmin):
     inlines=[ProductImageInline,ProductDetailInline,SizeChartInline]
     
 class StockAdmin(admin.ModelAdmin):
-    list_display= ['size_chart','minimum_quantity','stock_quantity']
+    list_display= ['size_chart','stock_quantity']
     
     
 class RolePriceAdmin(admin.ModelAdmin):    
