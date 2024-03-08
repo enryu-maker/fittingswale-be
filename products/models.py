@@ -62,7 +62,7 @@ class SizeChart(models.Model):
     status = models.CharField(max_length=10, choices=DISABLE_CHOICES, default='Activate')
     product = models.ForeignKey('Product', on_delete=models.CASCADE)
     size = models.CharField(max_length=255,null=True)
-    quantity = models.IntegerField(null=True)
+    # quantity = models.IntegerField(null=True)
     minimum_stock_quantity = models.PositiveIntegerField(null=True)
     finish = models.ForeignKey(Finish,on_delete=models.CASCADE,null=True)
     def __str__(self):
