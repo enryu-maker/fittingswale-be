@@ -29,5 +29,5 @@ class AddData(APIView):
 class BannerAPIView(APIView):
     def get(self,request):
         banner = Banner.objects.all()
-        serializer = BannerSerializer(banner)
+        serializer = BannerSerializer(banner,many=True)
         return Response(serializer.data)
