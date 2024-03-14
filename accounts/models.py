@@ -47,7 +47,7 @@ class User(AbstractBaseUser, PermissionsMixin):
     """
     email = models.EmailField(_('email address'), max_length=255, unique=True)
     name = models.CharField(_('name'), max_length=30, blank=True)
-    mobile_no = models.IntegerField(_('MobNumber'), null=True, blank=True,unique=True)
+    mobile_no = models.CharField(_('MobNumber'), null=True, blank=True,unique=True)
     pan_no = models.IntegerField(_('PanNumber'), null=True, blank=True,unique=True)
     gst_no = models.IntegerField(_('GstNumber'), null=True, blank=True,unique=True)
     pan_card = models.FileField(upload_to="pancards", max_length=254,null=True,blank=True)
