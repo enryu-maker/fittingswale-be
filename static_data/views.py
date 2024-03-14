@@ -25,3 +25,9 @@ class AddData(APIView):
             if serializer.is_valid():
                 serializer.save()
         return Response({'msg':'done'})
+    
+class BannerAPIView(APIView):
+    def get(self,request):
+        banner = Banner.objects.all()
+        serializer = BannerSerializer(banner)
+        return Response(serializer.data)

@@ -1,7 +1,5 @@
 from django.db import models
 
-# Create your models here.
-
 class PrivacyPolicy(models.Model):
     section = models.CharField(max_length=100)
     content = models.TextField()
@@ -22,3 +20,6 @@ class TermsAndCondition(models.Model):
     
     def __str__(self):
         return self.title
+
+class Banner(models.Model):
+    image = models.ImageField(upload_to="banner")

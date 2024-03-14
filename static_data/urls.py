@@ -10,4 +10,5 @@ router.register(r"refund-cancellation-policy",RefundCancellationViewSet,basename
 urlpatterns = [
     path('',include(router.urls)),
     path('data/',AddData.as_view()),
+    path('get-banners/',BannerAPIView.as_view()),
 ]

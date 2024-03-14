@@ -54,7 +54,6 @@ class User(AbstractBaseUser, PermissionsMixin):
     gst_certificate = models.FileField(upload_to="gstcertificates", max_length=254,null=True,blank=True)
     role = models.CharField(_('Role'), max_length=70, null=True, blank=True)
     otp = models.IntegerField(null=True)
-    
     is_staff = models.BooleanField(_('staff status'), default=False, help_text=_(
         'Designates whether the user can log into this admin site')
     )
