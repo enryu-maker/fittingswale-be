@@ -135,7 +135,7 @@ class ProductDetail(models.Model):
 class PaymentTransaction(models.Model):
     PAYMENT_METHOD_CHOICES = [
         ('credit_card', 'Credit Card'),
-        ('paypal', 'PayPal'),
+        ('online', 'Online'),
         ('bank_transfer', 'Bank Transfer'), 
         ('cod', 'COD'),
     ]
@@ -147,16 +147,15 @@ class PaymentTransaction(models.Model):
     ]
 
     user = models.ForeignKey(settings.AUTH_USER_MODEL,on_delete=models.CASCADE)
-    currency = models.CharField(max_length=3)
+    # currency = models.CharField(max_length=3)
     payment_method = models.CharField(max_length=20, choices=PAYMENT_METHOD_CHOICES)
     transaction_id = models.CharField(max_length=100,null=True,blank=True)
     status = models.CharField(max_length=20, choices=STATUS_CHOICES, default='pending')
-    payment_date = models.DateTimeField(auto_now_add=True)
-    items = models.TextField()
-    subtotal = models.TextField()
-    subtotal_qty = models.TextField()
-    address = models.TextField()
-    muid = models.UUIDField(default=uuid.uuid4, editable=False, unique=True)
+    payment_date = models.DateTimeField(null=True)
+    items = models.JSONField()
+    address = models.JSONField()
+    contact_details = models.JSONField(null=True)
+    # muid = models.UUIDField(default=uuid.uuid4, editable=False, unique=True)
     total = models.DecimalField(decimal_places=2,max_digits=20)
     
     def save(self, *args, **kwargs):

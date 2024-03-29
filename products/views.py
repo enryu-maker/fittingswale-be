@@ -1,3 +1,5 @@
+from rest_framework_simplejwt.authentication import JWTAuthentication
+from rest_framework.permissions import IsAuthenticated
 import json
 from rest_framework import viewsets
 from .models import *
@@ -120,10 +122,13 @@ class SubCategoryWithProductApiView(APIView):
         sub_category = SubCategory.objects.filter(pk=sub_id)
         serializer = SubCategoryProductSerializer(sub_category, many=True,context={'role_id': role_id})
         return Response(serializer.data)
-    
 class PaymentTransactionAPIView(APIView):
+    authentication_class = [JWTAuthentication,]
+    permission_classes = [IsAuthenticated,]
     def post(self, request):
-        serializer = PaymentTransactionSerializer(data=request.data)
+        data = request.data
+        data['user'] = request.user.id
+        serializer = PaymentTransactionSerializer(data=data)
         if serializer.is_valid():
             serializer.save()
             return Response(serializer.data, status=status.HTTP_201_CREATED)
