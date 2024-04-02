@@ -44,7 +44,7 @@ class SizeChartSerializer(serializers.ModelSerializer):
     price_map = serializers.SerializerMethodField()
     class Meta:
         model = SizeChart
-        fields = ['id','status','size','finish','price_map']  
+        fields = ['id','status','size','finish','price_map','sku_code']  
         
     def get_price_map(self,obj):
         role_id = 1 if self.context.get('role_id') is None else self.context.get('role_id')
@@ -86,7 +86,7 @@ class ProductSerializer(serializers.ModelSerializer):
     product_details =serializers.SerializerMethodField()
     class Meta:
         model = Product
-        fields = ['id','product_name','description','image','sku_code','status','size_chart','product_images','product_details']
+        fields = ['id','product_name','description','image','status','size_chart','product_images','product_details']
         
     def get_size_chart(self,obj):
         role_id = self.context.get('role_id')

@@ -60,6 +60,7 @@ class SizeChart(models.Model):
         ('Inactivate', 'Inactivate'),
     ]
     status = models.CharField(max_length=10, choices=DISABLE_CHOICES, default='Activate')
+    sku_code = models.CharField(max_length=30,null=True,blank=True)
     product = models.ForeignKey('Product', on_delete=models.CASCADE)
     size = models.CharField(max_length=255,null=True)
     # quantity = models.IntegerField(null=True)
@@ -85,7 +86,6 @@ class Product(models.Model):
     sub_category = models.ForeignKey(SubCategory, on_delete=models.CASCADE)
     category = models.ForeignKey(Category,on_delete=models.CASCADE,null=True)
     main_category = models.ForeignKey(MainCategory, on_delete=models.CASCADE,null=True)
-    sku_code = models.CharField(max_length=30,null=True,blank=True)
     DISABLE_CHOICES = [
         ('Activate', 'Activate'),
         ('Inactivate', 'Inactivate'),
