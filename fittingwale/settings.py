@@ -197,3 +197,6 @@ EMAIL_PORT = 587
 EMAIL_USE_TLS = True
 EMAIL_HOST_USER = "itsriteshmahale2002@gmail.com"
 EMAIL_HOST_PASSWORD = "jduq xhqz tizb xviq"
+
+
+DATA_UPLOAD_MAX_NUMBER_FIELDS = 5000

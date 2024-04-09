@@ -6,7 +6,7 @@ import random
 import string
 from products.models import Product
 from django.contrib.auth import get_user_model
-
+from django.core.mail import send_mail
 
 class UserManager(BaseUserManager):
     """
@@ -58,17 +58,23 @@ class User(AbstractBaseUser, PermissionsMixin):
         'Designates whether the user can log into this admin site')
     )
     
+    is_verify = models.BooleanField(_('Verified'), default=False, help_text=_(
+        'Designates whether this user has Verified his account.')
+    )
+    
     is_active = models.BooleanField(_('active'), default=True, help_text=_(
         'Designates whether this user should be treated as active. Unselect this instead of deleting account')
     )
     
     date_joined = models.DateTimeField(_('date joined'), default=timezone.now)
-
+    
+    
+    
     is_trusty = models.BooleanField(_('trusty'), default=False, help_text=_(
         'Designates whether this user has confirmed his account.')
     )
 
-    USERNAME_FIELD = 'email'  # Set email as a default login field
+    USERNAME_FIELD = 'email'
     REQUIRED_FIELDS = []
 
     objects = UserManager()
@@ -79,8 +85,25 @@ class User(AbstractBaseUser, PermissionsMixin):
     @property
     def get_full_name(self):
         return self.name
-
-
+    
+    def is_profile_complete(self):
+        """
+        Method to check if the user's profile is complete.
+        """
+        # Check if all required fields are not null
+        if self.pan_no is not None and self.gst_no is not None and self.pan_card and self.gst_certificate:
+            return True
+        return False
+    
+    def save(self, *args, **kwargs):
+        if not self.is_verify and self.is_profile_complete() and not user.role=="Customer":
+            subject = 'Profile KYC Request'
+            message = f'To Verify This Profile Please visit :https://api-nerdtech.fittingswale.in/admin/accounts/user/{self.id}/change/'
+            from_email = 'itsriteshmahale2002@gmail.com'
+            to_email = ['rahulmittal7878@gmail.com','riteshmahale15@gmail.com']
+            send_mail(subject, message, from_email, to_email)
+        super().save(*args, **kwargs)
+    
     class Meta:
         verbose_name = _('User')
         verbose_name_plural = _('Users')

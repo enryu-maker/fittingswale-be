@@ -90,6 +90,12 @@ class LoginUserAPIView(APIView):
             tokens = get_tokens_for_user(user)
             role_id = Role.objects.get(title=user.role).id
             tokens['user_role'] = role_id
+            
+            if user.is_verify or role_id == 1:
+                tokens['profile_complete'] = True
+            else:
+                tokens['profile_complete'] = False
+            
             return Response(tokens)
         return Response({'msg': 'Invalid credentials'}, status=status.HTTP_401_UNAUTHORIZED)
 
@@ -239,7 +245,6 @@ class UserAddressAPIView(APIView):
             address = Address.objects.get(id=pk, user=user)
             
             if address.active:
-                # Find any other address for the user and set it as active
                 remaining_addresses = user.address_set.exclude(id=pk)
                 if remaining_addresses.exists():
                     new_active_address = remaining_addresses.first()
