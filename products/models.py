@@ -160,7 +160,7 @@ class PaymentTransaction(models.Model):
     
     def save(self, *args, **kwargs):
         if not self.transaction_id:
-            self.transaction_id = str(uuid.uuid4())[:8]  # Generate a random 8-character string as transaction ID
+            self.transaction_id = str(uuid.uuid4())[:8]
         super().save(*args, **kwargs)
 
 class Stock(models.Model):

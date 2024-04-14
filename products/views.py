@@ -13,6 +13,7 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from rest_framework import status
 from django.forms import inlineformset_factory
 from .forms import ProductForm, ProductImageForm,MultiImageForm
+from django.db.models import Q
 
 class ProductListView(View):
     def get(self, request):
@@ -160,3 +161,9 @@ class ProductCreateView(View):
                     multi_image_formset.save()
             return redirect('success_url')
         return render(request, 'product_form.html', {'form': form, 'formset': formset})
+    
+class SearchResultsAPIView(APIView):
+    def get(self,request):
+        query = request.data.get("query")
+        products = Product.objects.filter(Q(product_name__search=query)|Q(description__search=query))
+        return Response(ProductSerializer(products,many=True).data)

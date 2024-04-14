@@ -90,13 +90,12 @@ class User(AbstractBaseUser, PermissionsMixin):
         """
         Method to check if the user's profile is complete.
         """
-        # Check if all required fields are not null
         if self.pan_no is not None and self.gst_no is not None and self.pan_card and self.gst_certificate:
             return True
         return False
     
     def save(self, *args, **kwargs):
-        if not self.is_verify and self.is_profile_complete() and not user.role=="Customer":
+        if not self.is_verify and self.is_profile_complete() and not self.role=="Customer":
             subject = 'Profile KYC Request'
             message = f'To Verify This Profile Please visit :https://api-nerdtech.fittingswale.in/admin/accounts/user/{self.id}/change/'
             from_email = 'itsriteshmahale2002@gmail.com'
@@ -108,8 +107,6 @@ class User(AbstractBaseUser, PermissionsMixin):
         verbose_name = _('User')
         verbose_name_plural = _('Users')
         db_table = 'user'
-    
-
 
 class Address(models.Model):
     user = models.ForeignKey(get_user_model(), on_delete=models.CASCADE)

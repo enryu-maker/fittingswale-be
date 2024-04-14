@@ -17,7 +17,7 @@ from django.contrib.auth.tokens import default_token_generator
 from django.contrib.auth import authenticate
 from django.utils.encoding import smart_str
 from rest_framework.viewsets import ModelViewSet
-from products.models import Role
+from products.models import Role,PaymentTransaction,SizeChart
 import random
 import string
 
@@ -119,6 +119,7 @@ class GoogleLoginAPIView(APIView):
 class ForgotPasswordAPIView(APIView):
     def post(self, request):
         email = request.data.get('email')
+        domain = request.data.get('domain')
         try:
             user = User.objects.get(email=email)
         except User.DoesNotExist:
@@ -127,7 +128,7 @@ class ForgotPasswordAPIView(APIView):
         uid = urlsafe_base64_encode(force_bytes(user.pk))
         token = default_token_generator.make_token(user)
         
-        reset_link = f"{settings.DOMAIN}/reset-password/{uid}/{token}/"
+        reset_link = f"{domain}/reset-password/{uid}/{token}/"
         
         send_mail(
             'Password Reset',
@@ -157,19 +158,19 @@ class ResetPasswordAPIView(APIView):
         else:
             return Response({'msg': 'Invalid password reset link'}, status=status.HTTP_400_BAD_REQUEST)
 
-    
 class UserAPIView(APIView):
     authentication_class = [JWTAuthentication,]
     def get(self,request):
         user = request.user
-        
         try:
             print(user.email)
         except Exception as e:
             return Response({"msg":"AnonymousUser Cannot View Profile"})
         
         serializer = UserSerializer(user)
-        return Response(serializer.data)
+        data = serializer.data
+        data['is_verified'] = True if (user.role=="Customer" or user.is_verify) else False
+        return Response(data)
 
 
 class EditUserAPIView(APIView):
@@ -257,3 +258,42 @@ class UserAddressAPIView(APIView):
         except Address.DoesNotExist:
             return Response({'msg': 'Address not found'}, status=status.HTTP_404_NOT_FOUND)
 
+class OrderAPIView(APIView):
+    authentication_classes = [JWTAuthentication]
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request):
+        order_list = []
+        orders = PaymentTransaction.objects.filter(user=request.user)
+        
+        for order in orders:
+            order_items = []
+            for item in order.items:
+                product = Product.objects.get(id=item['product_id'])
+                size_chart = SizeChart.objects.get(id=item['size_id'])
+                order_items.append({
+                    "product": {
+                        "id": product.id,
+                        "product_name": product.product_name,
+                        # Add other fields you want to include
+                    },
+                    "size_chart": {
+                        "id": size_chart.id,
+                        "size":size_chart.size
+                    },
+                    "quantity": item['quantity']
+                })
+            
+            order_dict = {
+                "transaction_id": order.transaction_id,
+                "payment_method": order.payment_method,
+                "status": order.status,
+                "payment_date": order.payment_date,
+                "items": order_items,
+                "address": order.address,
+                "contact_details": order.contact_details,
+                "total": order.total
+            }
+            order_list.append(order_dict)
+        
+        return Response({"orders": order_list})
