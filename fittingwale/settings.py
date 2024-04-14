@@ -60,6 +60,7 @@ INSTALLED_APPS = [
     'whitenoise.runserver_nostatic',
     'nested_admin',
     'static_data',
+    'website',
 ]
 
 MIDDLEWARE = [
