@@ -8,7 +8,7 @@ class ProductDetailSerializer(serializers.ModelSerializer):
 
 class RoleSerializer(serializers.ModelSerializer):
     key = serializers.IntegerField(source='id')
-    value = serializers.CharField(source='role')
+    value = serializers.CharField(source='title')
 
     class Meta:
         model = Role
