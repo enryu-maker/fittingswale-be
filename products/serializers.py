@@ -7,9 +7,16 @@ class ProductDetailSerializer(serializers.ModelSerializer):
         fields = "__all__"
 
 class RoleSerializer(serializers.ModelSerializer):
+    key = serializers.IntegerField(source='id')
+    value = serializers.CharField(source='role')
+
     class Meta:
         model = Role
-        fields = '__all__'
+        fields = ('key', 'value')
+
+    def to_representation(self, instance):
+        data = super().to_representation(instance)
+        return {'key': data['key'], 'value': data['value']}
     
 class LocationSerializer(serializers.ModelSerializer):
     class Meta:
