@@ -164,6 +164,8 @@ class ProductCreateView(View):
     
 class SearchResultsAPIView(APIView):
     def get(self,request):
-        query = request.data.get("query")
+        query = request.query_params.get("query")
+        if query=='':
+            return Response({'msg':'Cannot Find Product'})
         products = Product.objects.filter(Q(product_name__search=query)|Q(description__search=query))
         return Response(ProductSerializer(products,many=True).data)
