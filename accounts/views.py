@@ -90,11 +90,12 @@ class LoginUserAPIView(APIView):
             tokens = get_tokens_for_user(user)
             role_id = Role.objects.get(title=user.role).id
             tokens['user_role'] = role_id
+            tokens['is_profile_complete']= user.is_profile_complete()
             
             if user.is_verify or role_id == 1:
-                tokens['profile_complete'] = True
+                tokens['is_verify'] = True
             else:
-                tokens['profile_complete'] = False
+                tokens['is_verify'] = False
             
             return Response(tokens)
         return Response({'msg': 'Invalid credentials'}, status=status.HTTP_401_UNAUTHORIZED)

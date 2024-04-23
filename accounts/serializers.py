@@ -37,10 +37,14 @@ class RegisterSerializer(serializers.ModelSerializer):
             raise serializers.ValidationError(msg[0])
 
 class UserSerializer(serializers.ModelSerializer):
+    is_profile_complete = serializers.SerializerMethodField()
     class Meta:
         model = User
-        fields = ["name","mobile_no","email","gst_no","pan_no","pan_card","gst_certificate","role"]
-        
+        fields = ["name","mobile_no","email","gst_no","pan_no","pan_card","gst_certificate","role","is_profile_complete"]
+    
+    def get_is_profile_complete(self,obj):
+        return obj.is_profile_complete()
+    
     def to_internal_value(self, data):
         try:
             return super().to_internal_value(data)
