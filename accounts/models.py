@@ -99,7 +99,7 @@ class User(AbstractBaseUser, PermissionsMixin):
             subject = 'Profile KYC Request'
             message = f'To Verify This Profile Please visit :https://api-nerdtech.fittingswale.in/admin/accounts/user/{self.id}/change/'
             from_email = 'itsriteshmahale2002@gmail.com'
-            to_email = ['rahulmittal7878@gmail.com','riteshmahale15@gmail.com']
+            to_email = ['rahulmittal7878@gmail.com','riteshmahale15@gmail.com',"akifkhan60067@gmail.com"]
             send_mail(subject, message, from_email, to_email)
         super().save(*args, **kwargs)
     
