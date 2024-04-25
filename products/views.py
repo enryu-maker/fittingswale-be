@@ -14,6 +14,7 @@ from rest_framework import status
 from django.forms import inlineformset_factory
 from .forms import ProductForm, ProductImageForm,MultiImageForm
 from django.db.models import Q
+from rest_framework_simplejwt.authentication import JWTAuthentication
 
 class ProductListView(View):
     def get(self, request):
@@ -88,8 +89,21 @@ class MainCategoryViewSet(viewsets.ModelViewSet):
     serializer_class = MainCategorySerializer
 
 class SubCategoryViewSet(viewsets.ModelViewSet):
+    authentication_classes = [JWTAuthentication]
     queryset = SubCategory.objects.all()
     serializer_class = SubCategoryProductSerializer
+    
+    def get_serializer_context(self):
+        role_id = 1
+        if self.request.user.is_authenticated:
+            if self.request.user.role == "Business":
+                role_id=3
+            elif self.request.user.role == "Interior":
+                role_id=2
+        context = super().get_serializer_context()
+        context['role_id'] = role_id
+        return context
+    
     
 class CategoryViewSet(viewsets.ModelViewSet):
     queryset = Category.objects.all()
@@ -104,7 +118,14 @@ class FinishViewSet(viewsets.ModelViewSet):
     serializer_class = FinishSerializer
     
 class ProductAPIView(APIView):
-    def get(self,request,id,role_id):
+    authentication_classes = [JWTAuthentication]
+    def get(self,request,id):
+        role_id = 1
+        if request.user.is_authenticated:
+            if request.user.role == "Business":
+                role_id=3
+            elif request.user.role == "Interior":
+                role_id=2
         try:
             product = Product.objects.get(pk=id)
             serializer = ProductSerializer(product,context={'role_id': role_id})
@@ -119,10 +140,19 @@ class MainCategoryWithSubcategoryApiView(APIView):
         return Response(serializer.data)
 
 class SubCategoryWithProductApiView(APIView):
-    def get(self, request,sub_id,role_id,format=None):
+    authentication_classes = [JWTAuthentication]
+    def get(self, request,sub_id,format=None):
+        role_id = 1
+        if request.user.is_authenticated:
+            if request.user.role == "Business":
+                role_id=3
+            elif request.user.role == "Interior":
+                role_id=2
+                
         sub_category = SubCategory.objects.filter(pk=sub_id)
         serializer = SubCategoryProductSerializer(sub_category, many=True,context={'role_id': role_id})
         return Response(serializer.data)
+    
 class PaymentTransactionAPIView(APIView):
     authentication_class = [JWTAuthentication,]
     permission_classes = [IsAuthenticated,]
@@ -163,7 +193,11 @@ class ProductCreateView(View):
         return render(request, 'product_form.html', {'form': form, 'formset': formset})
     
 class SearchResultsAPIView(APIView):
+    authentication_classes = [JWTAuthentication,]
     def get(self,request):
+        role_id = 1
+        if request.user.is_authenticated:
+            role_id = request.user.role.id if hasattr(request.user, 'role') else 1
         query = request.query_params.get("query")
         if query=='':
             return Response({'msg':'Cannot Find Product'})

@@ -265,18 +265,24 @@ class OrderAPIView(APIView):
 
     def get(self, request):
         order_list = []
-        orders = PaymentTransaction.objects.filter(user=request.user)
+        try:
+            orders = PaymentTransaction.objects.filter(user=request.user)
+        except:
+            return Response({'msg':'No orders Found'})
         
         for order in orders:
             order_items = []
             for item in order.items:
-                product = Product.objects.get(id=item['product_id'])
+                try:
+                    product = Product.objects.get(id=item['product_id'])
+                except:
+                    size_chart = SizeChart.objects.get(id=item['product_id'])
+                    product = size_chart.product
                 size_chart = SizeChart.objects.get(id=item['size_id'])
                 order_items.append({
                     "product": {
                         "id": product.id,
                         "product_name": product.product_name,
-                        # Add other fields you want to include
                     },
                     "size_chart": {
                         "id": size_chart.id,
