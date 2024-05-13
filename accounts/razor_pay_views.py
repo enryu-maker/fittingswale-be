@@ -47,7 +47,7 @@ class TransactionAPIView(APIView):
                 razorpay_order_id = transaction_serializer.validated_data.get("razorpay_order_id"),
                 razorpay_signature = transaction_serializer.validated_data.get("razorpay_signature")
             )
-            transaction_serializer.save()
+            # transaction_serializer.save()
             response = {
                 "status_code": status.HTTP_201_CREATED,
                 "message": "transaction created"
