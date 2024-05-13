@@ -52,7 +52,7 @@ class TransactionAPIView(APIView):
                 "status_code": status.HTTP_201_CREATED,
                 "message": "transaction created"
             }
-            order.razorpay_order_id = transaction_serializer.validated_data.get("razorpay_payment_id")
+            order.razorpay_payment_id = transaction_serializer.validated_data.get("razorpay_payment_id")
             order.razorpay_order_id = transaction_serializer.validated_data.get("razorpay_order_id")
             order.razorpay_signature = transaction_serializer.validated_data.get("razorpay_signature")
             order.status = 'completed'
