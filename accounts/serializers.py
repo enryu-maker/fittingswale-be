@@ -1,6 +1,29 @@
 from rest_framework import serializers
 from .models import *
+from products.serializers import PaymentTransaction
 
+class RazorpayOrderSerializer(serializers.Serializer):
+    amount = serializers.IntegerField()
+    currency = serializers.CharField()
+
+
+class RazorpayTransactionSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = PaymentTransaction
+        fields = (
+            'user',
+            'razorpay_payment_id',
+            'razorpay_order_id',
+            'signature',
+            'payment_method',
+            'transaction_id',
+            'status',
+            'payment_date',
+            'items',
+            'address',
+            'contact_details',
+            'total'
+        )
 
 class RegisterSerializer(serializers.ModelSerializer):
     class Meta:

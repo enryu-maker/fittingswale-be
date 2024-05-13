@@ -157,14 +157,34 @@ class PaymentTransactionAPIView(APIView):
     authentication_class = [JWTAuthentication,]
     permission_classes = [IsAuthenticated,]
     def post(self, request):
-        data = request.data
-        data['user'] = request.user.id
-        serializer = PaymentTransactionSerializer(data=data)
-        if serializer.is_valid():
-            serializer.save()
-            return Response(serializer.data, status=status.HTTP_201_CREATED)
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-    
+        if request.data['payment_method']=='online':
+            try:
+                order_response = create_order(
+                    amount=razorpay_order_serializer.validated_data.get("total"),
+                    currency="INR"
+                )
+                response = {
+                    "status_code": status.HTTP_201_CREATED,
+                    "msg": "order created",
+                    "data": order_response
+                }
+                return Response(response, status=status.HTTP_201_CREATED)
+            except:
+                response = {
+                    "status_code": status.HTTP_400_BAD_REQUEST,
+                    "msg": "bad request",
+                }
+                return Response(response, status=status.HTTP_400_BAD_REQUEST)
+        else:
+                
+            data = request.data
+            data['user'] = request.user.id
+            serializer = PaymentTransactionSerializer(data=data)
+            if serializer.is_valid():
+                serializer.save()
+                return Response(serializer.data, status=status.HTTP_201_CREATED)
+            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        
     
 class ProductCreateView(View):
     def get(self, request):

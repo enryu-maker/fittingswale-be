@@ -2,6 +2,7 @@ from django.contrib import admin
 from django.urls import path,include
 from .views import *
 from products.views import PaymentTransactionAPIView
+from .razor_pay_views import RazorpayOrderAPIView,TransactionAPIView
 
 urlpatterns = [
     path('login/', LoginUserAPIView.as_view()),
@@ -15,4 +16,6 @@ urlpatterns = [
     path('address/<int:pk>/',UserAddressAPIView.as_view(),name="user_adress"),
     path('get-orders/',OrderAPIView.as_view(),name="get_orders"),
     path('paymenttransactions/', PaymentTransactionAPIView.as_view(), name='payment_transactions_api'),
+    path('create-order/', RazorpayOrderAPIView.as_view(), name='create_order'),
+    path('verify-order/', TransactionAPIView.as_view(), name='verify_order'),
 ]

@@ -147,6 +147,9 @@ class PaymentTransaction(models.Model):
     ]
 
     user = models.ForeignKey(settings.AUTH_USER_MODEL,on_delete=models.CASCADE)
+    razorpay_payment_id = models.CharField(max_length=100,null=True,blank=True)
+    razorpay_order_id = models.CharField(max_length=100,null=True,blank=True)
+    signature = models.CharField(max_length=100,null=True,blank=True)
     # currency = models.CharField(max_length=3)
     payment_method = models.CharField(max_length=20, choices=PAYMENT_METHOD_CHOICES)
     transaction_id = models.CharField(max_length=100,null=True,blank=True)
@@ -157,6 +160,7 @@ class PaymentTransaction(models.Model):
     contact_details = models.JSONField(null=True)
     # muid = models.UUIDField(default=uuid.uuid4, editable=False, unique=True)
     total = models.DecimalField(decimal_places=2,max_digits=20)
+    invoice = models.FileField(upload_to="invoice",null=True,blank=True)
     
     def save(self, *args, **kwargs):
         if not self.transaction_id:
