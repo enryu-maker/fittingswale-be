@@ -15,6 +15,8 @@ from django.forms import inlineformset_factory
 from .forms import ProductForm, ProductImageForm,MultiImageForm
 from django.db.models import Q
 from rest_framework_simplejwt.authentication import JWTAuthentication
+from accounts.razor_pay.main import create_order
+from accounts.serializers import RazorpayOrderSerializer
 
 class ProductListView(View):
     def get(self, request):
@@ -152,7 +154,14 @@ class SubCategoryWithProductApiView(APIView):
         sub_category = SubCategory.objects.filter(pk=sub_id)
         serializer = SubCategoryProductSerializer(sub_category, many=True,context={'role_id': role_id})
         return Response(serializer.data)
-    
+from dotenv import load_dotenv
+import os
+
+
+load_dotenv()
+razor_pay_id = os.environ.get('RAZOR_PAY_ID')
+secret = os.environ.get('SECRET_KEY')
+  
 class PaymentTransactionAPIView(APIView):
     authentication_class = [JWTAuthentication,]
     permission_classes = [IsAuthenticated,]
@@ -160,14 +169,22 @@ class PaymentTransactionAPIView(APIView):
         if request.data['payment_method']=='online':
             try:
                 order_response = create_order(
-                    amount=razorpay_order_serializer.validated_data.get("total"),
+                    amount=request.data.get("total"),
                     currency="INR"
                 )
+                data = request.data
+                data['user'] = request.user.id
+                serializer = PaymentTransactionSerializer(data=data)
+                if serializer.is_valid():
+                    serializer.save()
                 response = {
                     "status_code": status.HTTP_201_CREATED,
                     "msg": "order created",
-                    "data": order_response
+                    "order_id":serializer.data["id"],
+                    "data": order_response,
+                    "razor_pay_secrets":{"id":razor_pay_id,"secret":secret}
                 }
+            # return Response(serializer.data, status=status.HTTP_201_CREATED)
                 return Response(response, status=status.HTTP_201_CREATED)
             except:
                 response = {

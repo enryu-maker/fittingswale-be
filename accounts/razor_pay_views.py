@@ -3,6 +3,10 @@ from rest_framework.views import APIView
 from rest_framework import status
 from accounts.razor_pay.main import create_order,verify_payment_signature
 from .serializers import RazorpayOrderSerializer,RazorpayTransactionSerializer
+from rest_framework.permissions import IsAuthenticated
+from rest_framework_simplejwt.authentication import JWTAuthentication
+from products.models import PaymentTransaction
+
 
 class RazorpayOrderAPIView(APIView):
     
@@ -29,20 +33,32 @@ class RazorpayOrderAPIView(APIView):
             }
             return Response(response, status=status.HTTP_400_BAD_REQUEST)
 
-class TransactionAPIView(APIView):   
+class TransactionAPIView(APIView):
+    authentication_class = [JWTAuthentication,]
+    permission_classes = [IsAuthenticated,] 
     def post(self, request):
-        transaction_serializer = RazorpayTransactionSerializer(data=request.data)
+        data = request.data
+        order = PaymentTransaction.objects.get(pk=request.data.get('order_id'))
+        transaction_serializer = RazorpayTransactionSerializer(data=data)
         if transaction_serializer.is_valid():
+            # print(transaction_serializer.validated_data.get("razorpay_payment_id"))
             verify_payment_signature(
-                razorpay_payment_id = transaction_serializer.validated_data.get("payment_id"),
-                razorpay_order_id = transaction_serializer.validated_data.get("order_id"),
-                razorpay_signature = transaction_serializer.validated_data.get("signature")
+                razorpay_payment_id = transaction_serializer.validated_data.get("razorpay_payment_id"),
+                razorpay_order_id = transaction_serializer.validated_data.get("razorpay_order_id"),
+                razorpay_signature = transaction_serializer.validated_data.get("razorpay_signature")
             )
             transaction_serializer.save()
             response = {
                 "status_code": status.HTTP_201_CREATED,
                 "message": "transaction created"
             }
+            order.razorpay_order_id = transaction_serializer.validated_data.get("razorpay_payment_id")
+            order.razorpay_order_id = transaction_serializer.validated_data.get("razorpay_order_id")
+            order.razorpay_signature = transaction_serializer.validated_data.get("razorpay_signature")
+            order.status = 'completed'
+            
+            order.save()
+            
             return Response(response, status=status.HTTP_201_CREATED)
         else:
             response = {
@@ -50,4 +66,5 @@ class TransactionAPIView(APIView):
                 "message": "bad request",
                 "error": transaction_serializer.errors
             }
+
             return Response(response, status=status.HTTP_400_BAD_REQUEST)

@@ -149,7 +149,7 @@ class PaymentTransaction(models.Model):
     user = models.ForeignKey(settings.AUTH_USER_MODEL,on_delete=models.CASCADE)
     razorpay_payment_id = models.CharField(max_length=100,null=True,blank=True)
     razorpay_order_id = models.CharField(max_length=100,null=True,blank=True)
-    signature = models.CharField(max_length=100,null=True,blank=True)
+    razorpay_signature = models.CharField(max_length=100,null=True,blank=True)
     # currency = models.CharField(max_length=3)
     payment_method = models.CharField(max_length=20, choices=PAYMENT_METHOD_CHOICES)
     transaction_id = models.CharField(max_length=100,null=True,blank=True)

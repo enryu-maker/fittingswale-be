@@ -21,6 +21,7 @@ from products.models import Role,PaymentTransaction,SizeChart
 import random
 import string
 
+
 def get_tokens_for_user(user):
     refresh = RefreshToken.for_user(user)
 

@@ -28,7 +28,7 @@ def create_order(amount,currency):
             }
         )
 
-def verify_payment_signature(self, razorpay_order_id, razorpay_payment_id, razorpay_signature):
+def verify_payment_signature(razorpay_order_id, razorpay_payment_id, razorpay_signature):
     try:
         verify_signature = client.utility.verify_payment_signature({
             'razorpay_order_id': razorpay_order_id,

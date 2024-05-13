@@ -7,23 +7,10 @@ class RazorpayOrderSerializer(serializers.Serializer):
     currency = serializers.CharField()
 
 
-class RazorpayTransactionSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = PaymentTransaction
-        fields = (
-            'user',
-            'razorpay_payment_id',
-            'razorpay_order_id',
-            'signature',
-            'payment_method',
-            'transaction_id',
-            'status',
-            'payment_date',
-            'items',
-            'address',
-            'contact_details',
-            'total'
-        )
+class RazorpayTransactionSerializer(serializers.Serializer):
+    razorpay_payment_id = serializers.CharField()
+    razorpay_order_id = serializers.CharField()
+    razorpay_signature = serializers.CharField()
 
 class RegisterSerializer(serializers.ModelSerializer):
     class Meta:
