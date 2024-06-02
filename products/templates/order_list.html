@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Product Size Chart</title>
+    <!-- Include Bootstrap CSS -->
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+    <div class="container mt-5">
+        <h2 class="mb-4">Product Size Chart</h2>
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th scope="col">SizeChart ID</th>
+                    <th scope="col">Size</th>
+                    <th scope="col">SKU Code</th>
+                    <th scope="col">SizeChart Status</th>
+                    <th scope="col">Product ID</th>
+                    <th scope="col">Product Name</th>
+                    {% comment %} <th scope="col">Product Description</th> {% endcomment %}
+                    <th scope="col">Product Status</th>
+                    <th scope="col">Product Quantity</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for item in size_chart_data %}
+                <tr>
+                    <td>{{ item.item.id }}</td>
+                    <td>{{ item.item.size }}</td>
+                    <td>{{ item.item.sku_code }}</td>
+                    <td>{{ item.item.status }}</td>
+                    <td>{{ item.item.product.id }}</td>
+                    <td>{{ item.item.product.product_name }}</td>
+                    {% comment %} <td>{{ item.item.product.description }}</td> {% endcomment %}
+                    <td>{{ item.item.product.status }}</td>
+                    <td>{{ item.quantity }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+    <!-- Include Bootstrap and jQuery JS -->
+    <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

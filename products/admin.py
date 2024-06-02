@@ -110,6 +110,9 @@ class ProductAdmin(NestedModelAdmin):
     
 class StockAdmin(admin.ModelAdmin):
     list_display= ['size_chart','stock_quantity']
+
+class PaymentTransactionAdmin(admin.ModelAdmin):
+    change_form_template = 'admin/products/paymenttransaction/change_form.html'
     
     
 class RolePriceAdmin(admin.ModelAdmin):    
@@ -128,5 +131,5 @@ admin.site.register(MultiImages)
 admin.site.register(ProductImage)
 admin.site.register(Category,CategoryAdmin)
 admin.site.register(SubCategory,SubCategoryAdmin)
-admin.site.register(PaymentTransaction)
+admin.site.register(PaymentTransaction,PaymentTransactionAdmin)
 admin.site.register(Stock,StockAdmin)

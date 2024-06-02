@@ -11,6 +11,6 @@ class Command(BaseCommand):
     help = 'Delete migration records for a specific app'
 
     def handle(self, *args, **options):
-        app_name = 'accounts'  # Replace with your app name
+        app_name = 'accounts'
         delete_migration_records(app_name)
         self.stdout.write(self.style.SUCCESS('Migration records deleted for app "%s"' % app_name))

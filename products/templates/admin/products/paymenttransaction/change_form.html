@@ -1,0 +1,30 @@
+{% extends "admin/change_form.html" %}
+
+{% block submit_buttons_bottom %}
+    {{ block.super }}
+    <button type="button" class="btn btn-info custom-btn" onclick="myCustomFunction({{ original.pk }})" onho>
+        <i class="fas fa-info-circle"></i> Order Details
+    </button>
+{% endblock %}
+
+{% block extrahead %}
+    {{ block.super }}
+    <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
+    <style>
+        .custom-btn {
+            font-size: 16px;
+            padding: 10px 20px;
+            cursor: pointer;
+            border-radius: 5px;
+        }
+        .custom-btn i {
+            margin-right: 5px;
+        }
+    </style>
+    <script type="text/javascript">
+        function myCustomFunction(orderId) {
+            const orderUrl = `/product/test-product/${orderId}/`;
+            window.location.href = orderUrl;
+        }
+    </script>
+{% endblock %}
