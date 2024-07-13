@@ -1,7 +1,6 @@
 from rest_framework_simplejwt.authentication import JWTAuthentication
 from rest_framework.permissions import IsAuthenticated
-import json
-from rest_framework import viewsets
+from rest_framework import viewsets,generics
 from .models import *
 from .serializers import *
 from django.shortcuts import render, redirect, get_object_or_404
@@ -110,6 +109,11 @@ class SubCategoryViewSet(viewsets.ModelViewSet):
 class CategoryViewSet(viewsets.ModelViewSet):
     queryset = Category.objects.all()
     serializer_class = CategorySerializer
+
+class CategoryRetriveAPIView(generics.RetrieveAPIView):
+    queryset = Category.objects.all()
+    serializer_class = CategoryDetailSerializer
+    lookup_field = 'id'
     
 class RoleViewSet(viewsets.ModelViewSet):
     queryset= Role.objects.all()
@@ -135,11 +139,6 @@ class ProductAPIView(APIView):
         except:
             return Response({'msg':'product not found'},status=status.HTTP_404_NOT_FOUND)
     
-class MainCategoryWithSubcategoryApiView(APIView):
-    def get(self, request, format=None):
-        main_categories = MainCategory.objects.all()
-        serializer = MainCategoryWithSubCategorySerializer(main_categories, many=True)
-        return Response(serializer.data)
 
 class SubCategoryWithProductApiView(APIView):
     authentication_classes = [JWTAuthentication]
@@ -154,6 +153,7 @@ class SubCategoryWithProductApiView(APIView):
         sub_category = SubCategory.objects.filter(pk=sub_id)
         serializer = SubCategoryProductSerializer(sub_category, many=True,context={'role_id': role_id})
         return Response(serializer.data)
+
 from dotenv import load_dotenv
 import os
 

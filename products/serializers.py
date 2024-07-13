@@ -24,10 +24,16 @@ class LocationSerializer(serializers.ModelSerializer):
         fields = "__all__"
         
 class CategorySerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Category
+        fields = ['id','category_name','status','image']
+        
+
+class CategoryDetailSerializer(serializers.ModelSerializer):
     sub_category = serializers.SerializerMethodField()
     class Meta:
         model = Category
-        fields = ['id','category_name','status','sub_category']
+        fields = ['id','category_name','status','image','sub_category']
         
     def get_sub_category(self,obj):
         return SubCategorySerializer(SubCategory.objects.filter(category=obj),many=True).data

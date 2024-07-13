@@ -13,6 +13,7 @@ router.register(r'finish',FinishViewSet,basename='finsh')
 urlpatterns = [
     path('',include(router.urls)),
     path('products/', ProductListView.as_view(), name='product-list'),
+    path('category/<int:id>/', CategoryRetriveAPIView.as_view(), name='category-view'),
     path('view/<int:id>/', ProductAPIView.as_view(), name='product-list'),
     path('sub-cat/<int:sub_id>/', SubCategoryWithProductApiView.as_view(), name='product-list'),
     path('add/', ProductCreateView.as_view(), name='add'),
