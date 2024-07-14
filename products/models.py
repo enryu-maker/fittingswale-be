@@ -161,6 +161,8 @@ class PaymentTransaction(models.Model):
     # muid = models.UUIDField(default=uuid.uuid4, editable=False, unique=True)
     total = models.DecimalField(decimal_places=2,max_digits=20)
     invoice = models.FileField(upload_to="invoice",null=True,blank=True)
+    is_delivered = models.BooleanField(_("Deliverd"),default=False)
+    delivery_date = models.DateTimeField(_("Delivery Time"), auto_now=False, auto_now_add=False,null=True)
     
     def save(self, *args, **kwargs):
         if not self.transaction_id:

@@ -20,7 +20,8 @@ from rest_framework.viewsets import ModelViewSet
 from products.models import Role,PaymentTransaction,SizeChart
 import random
 import string
-
+from products.serializers import ProductImageSerializer
+from products.models import ProductImage
 
 def get_tokens_for_user(user):
     refresh = RefreshToken.for_user(user)
@@ -280,10 +281,12 @@ class OrderAPIView(APIView):
                     size_chart = SizeChart.objects.get(id=item['product_id'])
                     product = size_chart.product
                 size_chart = SizeChart.objects.get(id=item['size_id'])
+                images = ProductImageSerializer(ProductImage.objects.filter(product=product),many=True).data
                 order_items.append({
                     "product": {
                         "id": product.id,
                         "product_name": product.product_name,
+                        "images":images
                     },
                     "size_chart": {
                         "id": size_chart.id,
@@ -300,7 +303,9 @@ class OrderAPIView(APIView):
                 "items": order_items,
                 "address": order.address,
                 "contact_details": order.contact_details,
-                "total": order.total
+                "total": order.total,
+                "is_delivered":order.is_delivered,
+                "delivery_date":order.delivery_date
             }
             order_list.append(order_dict)
         
