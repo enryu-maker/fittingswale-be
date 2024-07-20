@@ -15,6 +15,7 @@ urlpatterns = [
     path('google-login/',GoogleLoginAPIView.as_view()),
     path('address/',UserAddressAPIView.as_view(),name="user_adress"),
     path('address/<int:pk>/',AddressAPIView.as_view(),name="user_single_adress"),
+    path('get-active-address/',GetActiveAddressAPIView.as_view(),name="get_active_address"),
     path('get-orders/',OrderAPIView.as_view(),name="get_orders"),
     path('paymenttransactions/', PaymentTransactionAPIView.as_view(), name='payment_transactions_api'),
     path('create-order/', RazorpayOrderAPIView.as_view(), name='create_order'),

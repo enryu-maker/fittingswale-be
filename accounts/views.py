@@ -227,6 +227,19 @@ class UserAddressAPIView(APIView):
         except Address.DoesNotExist:
             return Response({'msg': 'Address not found or does not belong to the authenticated user'}, status=status.HTTP_404_NOT_FOUND)
         
+class GetActiveAddressAPIView(APIView):
+    authentication_classes = [JWTAuthentication]
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request):
+        try:
+            user = request.user
+            addresses = Address.objects.get(user=user,active=True)
+            serializer = UserAddressSerializer(addresses)
+            return Response(serializer.data)
+        except:
+            return Response({'msg': 'Address not found or does not belong to the authenticated user'}, status.HTTP_204_NO_CONTENT)
+        
 class AddressAPIView(APIView):
     authentication_classes = [JWTAuthentication]
     permission_classes = [IsAuthenticated]
