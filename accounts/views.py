@@ -20,7 +20,7 @@ from rest_framework.viewsets import ModelViewSet
 from products.models import Role,PaymentTransaction,SizeChart
 import random
 import string
-from products.serializers import ProductImageSerializer
+from products.serializers import ProductImageSerializer,SizeChartSerializer
 from products.models import ProductImage
 
 def get_tokens_for_user(user):
@@ -286,6 +286,12 @@ class OrderAPIView(APIView):
     permission_classes = [IsAuthenticated]
 
     def get(self, request):
+        role_id = 1
+        if request.user.is_authenticated:
+            if request.user.role == "Business":
+                role_id=3
+            elif request.user.role == "Interior":
+                role_id=2
         order_list = []
         try:
             orders = PaymentTransaction.objects.filter(user=request.user)
@@ -300,7 +306,7 @@ class OrderAPIView(APIView):
                 except:
                     size_chart = SizeChart.objects.get(id=item['product_id'])
                     product = size_chart.product
-                size_chart = SizeChart.objects.get(id=item['size_id'])
+                size_chart = SizeChartSerializer(size_chart,context={'role_id': role_id}).data
                 images = ProductImageSerializer(ProductImage.objects.filter(product=product),many=True).data
                 order_items.append({
                     "product": {
@@ -308,10 +314,7 @@ class OrderAPIView(APIView):
                         "product_name": product.product_name,
                         "images":images
                     },
-                    "size_chart": {
-                        "id": size_chart.id,
-                        "size":size_chart.size
-                    },
+                    "size_chart": size_chart,
                     "quantity": item['quantity']
                 })
             
