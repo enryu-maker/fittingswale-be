@@ -115,6 +115,7 @@ class Address(models.Model):
     state = models.CharField(max_length=255)
     zip_code = models.CharField(max_length=10)
     active = models.BooleanField(default=False)
+    type = models.CharField(max_length=255,null=True)
 
     def __str__(self):
         return self.user.name if self.user.name else "Unknown User"
