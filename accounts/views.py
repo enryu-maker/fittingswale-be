@@ -227,18 +227,38 @@ class UserAddressAPIView(APIView):
         except Address.DoesNotExist:
             return Response({'msg': 'Address not found or does not belong to the authenticated user'}, status=status.HTTP_404_NOT_FOUND)
         
+class AddressAPIView(APIView):
+    authentication_classes = [JWTAuthentication]
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request,pk):
+        try:
+            user = request.user
+            addresses = Address.objects.get(user=user,pk=pk)
+            address = Address.objects.filter(user=user,active=True).first()
+            if addresses.id != address.id:
+                address.active=False
+                address.save()    
+            addresses.active=True
+            addresses.save()
+            serializer = UserAddressSerializer(addresses)
+            return Response(serializer.data)
+        except:
+            return Response({'msg': 'Address not found or does not belong to the authenticated user'}, status.HTTP_204_NO_CONTENT)
+    
     def put(self, request, pk):
         user = request.user
         try:
             
-            Address.objects.filter(user=user).update(active=False)
-            
-            address = Address.objects.get(id=pk, user=user)
+            data = Address.objects.get(id=pk, user=user)
+            address = UserAddressSerializer(instance=data,data=request.data,partial=True)
+            if address.is_valid():
+                # address.active = True
+                address.save()
+                return Response({'msg': address.data}, status=status.HTTP_200_OK)
+            else:
+                return Response({'msg': 'Address not updated'}, status=status.HTTP_400_BAD_REQUEST)
 
-            address.active = True
-            address.save()
-
-            return Response({'msg': 'Address updated successfully'}, status=status.HTTP_200_OK)
         except Address.DoesNotExist:
             return Response({'msg': 'Address not found or does not belong to the authenticated user'}, status=status.HTTP_404_NOT_FOUND)
 
