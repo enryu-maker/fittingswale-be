@@ -9,6 +9,8 @@ from products.models import Product
 from products.serializers import ProductSerializer
 from rest_framework_simplejwt.authentication import JWTAuthentication
 from rest_framework.permissions import IsAuthenticated
+from django.db.models.functions import Random
+
 
 class BestSellerProductList(APIView):
     def get(self, request, format=None):
@@ -16,26 +18,48 @@ class BestSellerProductList(APIView):
         serializer = BestSellerProductSerializer(bestsellers, many=True)
         return Response(serializer.data)
 
+
 class SpotlightProductList(APIView):
     def get(self, request, format=None):
         spotlights = SpotlightProduct.objects.all()
         serializer = SpotlightProductSerializer(spotlights, many=True)
         return Response(serializer.data)
 
+
 class NewProductAPIView(APIView):
     authentication_classes = [JWTAuthentication]
-    def get(self,request):
+
+    def get(self, request):
         role_id = 1
         if request.user.is_authenticated:
             if request.user.role == "Business":
-                role_id=3
+                role_id = 3
             elif request.user.role == "Interior":
-                role_id=2
+                role_id = 2
         try:
             newest_products = Product.objects.order_by('-id')[:8]
-            serializer = ProductSerializer(newest_products,context={'role_id': role_id},many=True)
+            serializer = ProductSerializer(newest_products, context={
+                                           'role_id': role_id}, many=True)
             return Response(serializer.data)
         except:
-            return Response({'msg':'product not found'},status=status.HTTP_404_NOT_FOUND)
-    
+            return Response({'msg': 'product not found'}, status=status.HTTP_404_NOT_FOUND)
 
+
+class RandomProductAPIView(APIView):
+    authentication_classes = [JWTAuthentication]
+
+    def get(self, request):
+        role_id = 1
+        if request.user.is_authenticated:
+            if request.user.role == "Business":
+                role_id = 3
+            elif request.user.role == "Interior":
+                role_id = 2
+        try:
+            random_products = Product.objects.annotate(
+                random_order=Random()).order_by('random_order')[:8]
+            serializer = ProductSerializer(random_products, context={
+                                           'role_id': role_id}, many=True)
+            return Response(serializer.data)
+        except:
+            return Response({'msg': 'product not found'}, status=status.HTTP_404_NOT_FOUND)
