@@ -103,8 +103,8 @@ class User(AbstractBaseUser, PermissionsMixin):
     def save(self, *args, **kwargs):
         if not self.is_verify and self.is_profile_complete() and not self.role == "Customer":
             subject = 'Profile KYC Request'
-            message = f'To Verify This Profile Please visit :https://api-nerdtech.fittingswale.in/admin/accounts/user/{
-                self.id}/change/'
+            message = f"""To Verify This Profile Please visit :https://api-nerdtech.fittingswale.in/admin/accounts/user/{
+                self.id}/change/"""
             from_email = 'itsriteshmahale2002@gmail.com'
             to_email = ['rahulmittal7878@gmail.com',
                         'riteshmahale15@gmail.com', "akifkhan60067@gmail.com"]

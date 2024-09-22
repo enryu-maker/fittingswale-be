@@ -9,9 +9,8 @@ class RazorpayOrderSerializer(serializers.Serializer):
 
 
 class PayUOrderSerializer(serializers.Serializer):
-    amount = serializers.IntegerField()
-    currency = serializers.CharField()
-    products = serializers.JSONField()
+    amount = serializers.FloatField()
+    productinfo = serializers.JSONField()
 
 
 class RazorpayTransactionSerializer(serializers.Serializer):
