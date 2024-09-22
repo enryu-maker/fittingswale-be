@@ -232,16 +232,16 @@ class PayUTransactionAPIView(APIView):
                 data = request.data
                 data['user'] = request.user.id
                 serializer = PaymentTransactionSerializer(data=data)
+                txnid = request.data["txnid"]
 
                 if serializer.is_valid():
                     verResponse = verify_payment(
-                        txnid=serializer.validated_data.get("txnid"))
+                        txnid=txnid)
+                    print(txnid)
                     if verResponse == True:
-
+                        print("hello")
                         serializer.save(status="success")
-                        serializer['transaction_id'] = serializer.validated_data.get(
-                            "txnid")
-                        serializer.save()
+                        serializer.save(transaction_id=txnid)
                         response = {
                             "status_code": status.HTTP_201_CREATED,
                             "msg": "order created",
@@ -250,8 +250,8 @@ class PayUTransactionAPIView(APIView):
                         }
                     else:
                         response = {
-                            "status_code": status.HTTP_201_CREATED,
-                            "msg": "order created",
+                            "status_code": status.HTTP_400_BAD_REQUEST,
+                            "msg": "order not created",
                             "order_id": serializer.data["id"],
                             "data": "Verification Failed",
                         }

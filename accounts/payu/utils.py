@@ -2,8 +2,7 @@ import hashlib
 
 
 def generate_payu_hash(key, txnid, amount, productinfo, firstname, email, salt):
-    hash_string = f"""{key} | {txnid} | {amount} | {
-        productinfo} | {firstname} | {email} | | | | | | | | | | | {salt}"""
+    hash_string = f"""{key}|{txnid}|{amount}|{productinfo}|{firstname}|{email}|||||||||||{salt}"""
     return hashlib.sha512(hash_string.encode('utf-8')).hexdigest()
 
 

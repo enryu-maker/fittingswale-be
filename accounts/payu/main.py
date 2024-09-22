@@ -18,7 +18,7 @@ def generate_payment_hash(amount: str, firstname: str, phonenumber: str, email: 
         'txnid': txnid,
         'amount': amount,
         'productinfo': productinfo,
-        'firstname': 'John',
+        'firstname': firstname,
         'email': email,
         'phone': phonenumber,
         'surl': 'https://www.fittingswale.com/',
@@ -33,8 +33,11 @@ def verify_payment(txnid: str) -> bool:
     if txnid == "":
         return False
 
+    print(txnid)
+
     command = "verify_payment"
     hash_value = generate_verification_hash(key, command, txnid, salt)
+    print(txnid)
 
     # Data for the verification request
     data = {
@@ -48,8 +51,11 @@ def verify_payment(txnid: str) -> bool:
     response = requests.post(
         payu_url+"/merchant/postservice?form=2", data=data)
 
+    # print(txnid, response.text)
+
     if response.status_code == 200:
-        if response.json()["status"] == "1" and response.json()["transaction_details"][txnid]["status"] == "success":
+        print(txnid)
+        if (response.json()["status"] == 1) and (response.json()["transaction_details"][txnid]["status"] == "success"):
             return True
         return False
     else:
